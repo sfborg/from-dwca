@@ -3,7 +3,7 @@ module github.com/sfborg/from-dwca
 go 1.22.1
 
 require (
-	github.com/gnames/dwca v0.1.1
+	github.com/gnames/dwca v0.2.0
 	github.com/gnames/gnlib v0.32.0
 	github.com/gnames/gnsys v0.2.4
 	github.com/spf13/cobra v1.8.0

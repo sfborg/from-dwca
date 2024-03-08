@@ -25,6 +25,7 @@ import (
 	"log/slog"
 	"os"
 
+	dwca "github.com/gnames/dwca/pkg"
 	"github.com/sfborg/from-dwca/internal/io/storio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
@@ -59,16 +60,17 @@ based on a version of sgma schema.`,
 		stor := storio.New(cfg)
 
 		fd := fdwca.New(cfg, stor)
+		var arc dwca.Archive
 
 		slog.Info("Importing DwCA data", "file", path)
-		err = fd.GetDwCA(path)
+		arc, err = fd.GetDwCA(path)
 		if err != nil {
 			slog.Error("Cannot get DarwinCore Archive", "error", err)
 			os.Exit(1)
 		}
 
 		slog.Info("Exporting data to SQLite", "file", path)
-		err = fd.ExportData()
+		err = fd.ExportData(arc)
 		if err != nil {
 			slog.Error("Cannot export data", "error", err)
 			os.Exit(1)

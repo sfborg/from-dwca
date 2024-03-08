@@ -2,6 +2,7 @@ package fdwca
 
 import (
 	dwca "github.com/gnames/dwca/pkg"
+	dwcacfg "github.com/gnames/dwca/pkg/config"
 	"github.com/sfborg/from-dwca/internal/ent/stor"
 	"github.com/sfborg/from-dwca/pkg/config"
 )
@@ -16,11 +17,24 @@ func New(cfg config.Config, stor stor.Storage) FromDwCA {
 	return &fdwca{cfg: cfg}
 }
 
-func (f *fdwca) GetDwCA(fileDwCA string) error {
-	return nil
+func (f *fdwca) GetDwCA(fileDwCA string) (dwca.Archive, error) {
+	dwcaCfg := dwcacfg.New()
+	arc, err := dwca.Factory(fileDwCA, dwcaCfg)
+	if err != nil {
+		return nil, err
+	}
+	arc.Load(arc.Config().ExtractPath)
+	arc.Normalize()
+
+	arc, err = dwca.FactoryOutput(dwcaCfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return arc, nil
 }
 
-func (f *fdwca) ExportData() error {
+func (f *fdwca) ExportData(arc dwca.Archive) error {
 	return nil
 }
 
