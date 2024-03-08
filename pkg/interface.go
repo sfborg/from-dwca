@@ -9,10 +9,10 @@ type FromDwCA interface {
 	// a normalized dwca.Archive object.
 	GetDwCA(fileDwCA string) (dwca.Archive, error)
 
-	// ExportData converts a dwca.Archive to a Species File Group Archive
+	// ImportDwCA converts a dwca.Archive to a Species File Group Archive
 	// database.
-	ExportData(dwca.Archive) error
+	ImportDwCA(arc dwca.Archive) error
 
-	// DumpData writes a Species File Group Archive to a file.
-	DumpData() error
+	// OutSFGA writes a Species File Group Archive to a file.
+	OutSFGA(outputPath string) error
 }

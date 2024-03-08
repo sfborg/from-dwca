@@ -27,6 +27,7 @@ import (
 
 	dwca "github.com/gnames/dwca/pkg"
 	"github.com/sfborg/from-dwca/internal/io/storio"
+	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
 	"github.com/spf13/cobra"
@@ -49,41 +50,52 @@ based on a version of sgma schema.`,
 			v(cmd)
 		}
 
-		if len(args) != 1 {
+		if len(args) != 2 {
 			cmd.Help()
 			os.Exit(0)
 		}
 
 		slog.Info("Converting DwCA to SFGA")
-		path := args[0]
+		dwcaPath := args[0]
+		outputPath := args[1]
 		cfg := config.New(opts...)
+		err = sysio.New(cfg).Init()
+		if err != nil {
+			slog.Error("Cannot initialize file system", "error", err)
+			os.Exit(1)
+		}
 		stor := storio.New(cfg)
+		err = stor.Init()
+		if err != nil {
+			slog.Error("Cannot initialize storage", "error", err)
+			os.Exit(1)
+		}
 
 		fd := fdwca.New(cfg, stor)
 		var arc dwca.Archive
 
-		slog.Info("Importing DwCA data", "file", path)
-		arc, err = fd.GetDwCA(path)
+		slog.Info("Importing DwCA data", "file", dwcaPath)
+		arc, err = fd.GetDwCA(dwcaPath)
 		if err != nil {
 			slog.Error("Cannot get DarwinCore Archive", "error", err)
 			os.Exit(1)
 		}
 
-		slog.Info("Exporting data to SQLite", "file", path)
-		err = fd.ExportData(arc)
+		slog.Info("Exporting data to SQLite", "file", dwcaPath)
+		err = fd.ImportDwCA(arc)
 		if err != nil {
 			slog.Error("Cannot export data", "error", err)
 			os.Exit(1)
 		}
 
-		slog.Info("Making SFG Archive", "file", path)
-		err = fd.DumpData()
+		slog.Info("Making SFG Archive", "file", dwcaPath)
+		err = fd.OutSFGA(outputPath)
 		if err != nil {
 			slog.Error("Cannot dump data", "error", err)
 			os.Exit(1)
 		}
 
-		slog.Info("DwCA data has been imported successfully", "file", path)
+		slog.Info("DwCA data has been imported successfully", "file", dwcaPath)
 	},
 }
 

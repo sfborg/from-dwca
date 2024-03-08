@@ -11,7 +11,7 @@ var (
 	repoURL = "https://github.com/sfborg/sfga"
 
 	// tag of the sfga repo to get correct schema version.
-	repoTag = "v1.0.0"
+	repoTag = "v1.2.0"
 
 	// jobsNum is the default number of concurrent jobs to run.
 	jobsNum = 5
@@ -40,6 +40,9 @@ type Config struct {
 
 	// JobsNum is the number of concurrent jobs to run.
 	JobsNum int
+
+	// BatchSize is the number of records to insert in one transaction.
+	BatchSize int
 
 	// InMemory is a flag to use in-memory sqlite database.
 	InMemory bool
@@ -105,11 +108,12 @@ func New(opts ...Option) Config {
 	schemaRepo := filepath.Join(tmp, "sfborg_sfda")
 
 	res := Config{
-		RepoURL:  repoURL,
-		RepoTag:  repoTag,
-		RepoPath: schemaRepo,
-		RootPath: path,
-		JobsNum:  jobsNum,
+		RepoURL:   repoURL,
+		RepoTag:   repoTag,
+		RepoPath:  schemaRepo,
+		RootPath:  path,
+		JobsNum:   jobsNum,
+		BatchSize: 50_000,
 	}
 
 	for _, opt := range opts {

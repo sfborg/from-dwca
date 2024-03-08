@@ -39,7 +39,6 @@ func (s *storio) Init() error {
 
 	dbFile := filepath.Join(s.cfg.DBPath, "sfga.db")
 
-	// read := fmt.Sprintf("\".read %s\"", schFile)
 	read := fmt.Sprintf(".read %s", schFile)
 	fmt.Println()
 
@@ -61,6 +60,14 @@ func (s *storio) Init() error {
 	_, err = db.Exec("PRAGMA temp_store = MEMORY")
 	if err != nil {
 		slog.Error("Cannot enable in-memory temporary tables", "error", err)
+		return err
+	}
+
+	// Enable Write-Ahead Logging. Allow many reads and one write concurrently,
+	// usually boosts write performance.
+	_, err = db.Exec("PRAGMA journal_mode = WAL")
+	if err != nil {
+		slog.Error("Cannot enable WAL journal mode", "error", err)
 		return err
 	}
 

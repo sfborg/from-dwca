@@ -3,30 +3,55 @@ package fdwca
 import (
 	dwca "github.com/gnames/dwca/pkg"
 	dwcacfg "github.com/gnames/dwca/pkg/config"
+	"github.com/gnames/gnparser"
 	"github.com/sfborg/from-dwca/internal/ent/stor"
 	"github.com/sfborg/from-dwca/pkg/config"
 )
 
 type fdwca struct {
-	cfg  config.Config
-	stor stor.Storage
-	dc   dwca.Archive
+	cfg     config.Config
+	stor    stor.Storage
+	arc     dwca.Archive
+	gnpPool chan gnparser.GNparser
 }
 
 func New(cfg config.Config, stor stor.Storage) FromDwCA {
-	return &fdwca{cfg: cfg}
+	res := &fdwca{cfg: cfg}
+
+	poolSize := cfg.JobsNum
+	gnpPool := make(chan gnparser.GNparser, poolSize)
+	for i := 0; i < poolSize; i++ {
+		cfgGNP := gnparser.NewConfig()
+		gnpPool <- gnparser.New(cfgGNP)
+	}
+	res.gnpPool = gnpPool
+	res.stor = stor
+
+	return res
 }
 
-func (f *fdwca) GetDwCA(fileDwCA string) (dwca.Archive, error) {
+func (fd *fdwca) GetDwCA(fileDwCA string) (dwca.Archive, error) {
 	dwcaCfg := dwcacfg.New()
 	arc, err := dwca.Factory(fileDwCA, dwcaCfg)
 	if err != nil {
 		return nil, err
 	}
-	arc.Load(arc.Config().ExtractPath)
-	arc.Normalize()
+	err = arc.Load(arc.Config().ExtractPath)
+	if err != nil {
+		return nil, err
+	}
+
+	err = arc.Normalize()
+	if err != nil {
+		return nil, err
+	}
 
 	arc, err = dwca.FactoryOutput(dwcaCfg)
+	if err != nil {
+		return nil, err
+	}
+
+	err = arc.Load(arc.Config().OutputPath)
 	if err != nil {
 		return nil, err
 	}
@@ -34,10 +59,21 @@ func (f *fdwca) GetDwCA(fileDwCA string) (dwca.Archive, error) {
 	return arc, nil
 }
 
-func (f *fdwca) ExportData(arc dwca.Archive) error {
+func (fd *fdwca) ImportDwCA(arc dwca.Archive) error {
+	fd.arc = arc
+	err := fd.importCore()
+	if err != nil {
+		return err
+	}
+
+	err = fd.importExtensions(arc)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func (f *fdwca) DumpData() error {
+func (f *fdwca) OutSFGA(path string) error {
 	return nil
 }
