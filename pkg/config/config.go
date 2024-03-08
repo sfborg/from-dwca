@@ -99,11 +99,11 @@ func New(opts ...Option) Config {
 	if err != nil {
 		path = os.TempDir()
 	}
+	path = filepath.Join(path, "sfborg")
 
 	tmp := os.TempDir()
 	schemaRepo := filepath.Join(tmp, "sfborg_sfda")
 
-	path = filepath.Join(path, "sfborg", "from", "dwca")
 	res := Config{
 		RepoURL:  repoURL,
 		RepoTag:  repoTag,
@@ -116,7 +116,7 @@ func New(opts ...Option) Config {
 		opt(&res)
 	}
 
-	res.DBPath = filepath.Join(res.RootPath, "db")
-	res.DumpPath = filepath.Join(res.RootPath, "dump")
+	res.DBPath = filepath.Join(res.RootPath, "from", "dwca", "db")
+	res.DumpPath = filepath.Join(res.RootPath, "from", "dwca", "dump")
 	return res
 }

@@ -41,6 +41,7 @@ var rootCmd = &cobra.Command{
 and converts it to Species File Group Archive. The database schema is created
 based on a version of sgma schema.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		var err error
 		versionFlag(cmd)
 		flags := []flagFunc{debugFlag, rootDirFlag, jobsNumFlag, inMemoryFlag}
 		for _, v := range flags {
@@ -55,11 +56,7 @@ based on a version of sgma schema.`,
 		slog.Info("Converting DwCA to SFGA")
 		path := args[0]
 		cfg := config.New(opts...)
-		stor, err := storio.New(cfg)
-		if err != nil {
-			slog.Error("Cannot create storage", "error", err)
-			os.Exit(1)
-		}
+		stor := storio.New(cfg)
 
 		fd := fdwca.New(cfg, stor)
 
