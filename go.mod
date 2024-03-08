@@ -5,17 +5,19 @@ go 1.22.1
 require (
 	github.com/gnames/dwca v0.1.1
 	github.com/gnames/gnlib v0.32.0
+	github.com/gnames/gnsys v0.2.4
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/cobra-cli v1.3.0
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gnames/gncsv v0.0.1 // indirect
 	github.com/gnames/gnfmt v0.4.3 // indirect
 	github.com/gnames/gnparser v1.9.0 // indirect
-	github.com/gnames/gnsys v0.2.4 // indirect
 	github.com/gnames/gnuuid v0.1.1 // indirect
 	github.com/gnames/organizer v0.1.1 // indirect
 	github.com/gnames/tribool v0.1.1 // indirect
@@ -30,6 +32,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rs/zerolog v1.30.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect

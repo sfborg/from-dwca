@@ -1,10 +1,16 @@
 package storio
 
-import "github.com/sfborg/from-dwca/internal/ent/stor"
+import (
+	"database/sql"
+
+	"github.com/sfborg/from-dwca/internal/ent/stor"
+	"github.com/sfborg/from-dwca/pkg/config"
+)
 
 type storio struct {
+	db *sql.DB
 }
 
-func New() stor.Storage {
-	return &storio{}
+func New(cfg config.Config) (stor.Storage, error) {
+	return &storio{}, nil
 }

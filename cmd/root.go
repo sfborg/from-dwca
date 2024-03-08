@@ -25,6 +25,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/sfborg/from-dwca/internal/io/storio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
 	"github.com/spf13/cobra"
@@ -35,9 +36,9 @@ var opts []config.Option
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "from-dwca",
-	Short: "Imports data from Darwin Core Archive to a sqlite database.",
+	Short: "Converts Darwin Core Archive to Species File Group Archive.",
 	Long: `Takes path to a Darwin Core Archive, extracts data and metadata,
-and imports it into a sqlite database. The database schema is created
+and converts it to Species File Group Archive. The database schema is created
 based on a version of sgma schema.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		versionFlag(cmd)
@@ -46,16 +47,24 @@ based on a version of sgma schema.`,
 			v(cmd)
 		}
 
-		cfg := config.New(opts...)
-		fd := fdwca.New(cfg)
 		if len(args) != 1 {
 			cmd.Help()
 			os.Exit(0)
 		}
 
+		slog.Info("Converting DwCA to SFGA")
 		path := args[0]
+		cfg := config.New(opts...)
+		stor, err := storio.New(cfg)
+		if err != nil {
+			slog.Error("Cannot create storage", "error", err)
+			os.Exit(1)
+		}
+
+		fd := fdwca.New(cfg, stor)
+
 		slog.Info("Importing DwCA data", "file", path)
-		err := fd.GetDwCA(path)
+		err = fd.GetDwCA(path)
 		if err != nil {
 			slog.Error("Cannot get DarwinCore Archive", "error", err)
 			os.Exit(1)

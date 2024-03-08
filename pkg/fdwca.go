@@ -12,7 +12,7 @@ type fdwca struct {
 	dc   dwca.Archive
 }
 
-func New(cfg config.Config) FromDwCA {
+func New(cfg config.Config, stor stor.Storage) FromDwCA {
 	return &fdwca{cfg: cfg}
 }
 

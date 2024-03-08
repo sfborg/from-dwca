@@ -7,8 +7,11 @@ import (
 )
 
 var (
-	// tag of sfgma schema used to create sqlite database.
-	schemaTag = "v1.0.1"
+	// repoURL is the URL to the SFGA schema repository.
+	repoURL = "https://github.com/sfborg/sfga"
+
+	// tag of the sfga repo to get correct schema version.
+	repoTag = "v1.0.0"
 
 	// jobsNum is the default number of concurrent jobs to run.
 	jobsNum = 5
@@ -17,14 +20,20 @@ var (
 // Config is a configuration object for the Darwin Core Archive (DwCA)
 // data processing.
 type Config struct {
+	// RepoURL is the URL to the SFGA schema repository.
+	RepoURL string
+
+	// RepoPath is a temporary location to schema files downloaded from GitHub.
+	RepoPath string
+
+	// RepoTag is a tag of the SFGA repository to use.
+	RepoTag string
+
 	// RootPath is the root path for all temporary files.
 	RootPath string
 
-	// SchemaRepo is a temporary location to schema files downloaded from GitHub.
-	SchemaRepo string
-
-	// SchemaPath is the path to store the schema file.
-	SchemaPath string
+	// DBPath is the path SFGA database.
+	DBPath string
 
 	// DumpPath is the path to store the resulting sqlite file with data.
 	DumpPath string
@@ -50,7 +59,7 @@ func OptRootPath(s string) Option {
 // OptSchemaPath sets the path to store the sqlite schema file.
 func OptSchemaPath(s string) Option {
 	return func(c *Config) {
-		c.SchemaPath = s
+		c.DBPath = s
 	}
 }
 
@@ -92,20 +101,22 @@ func New(opts ...Option) Config {
 	}
 
 	tmp := os.TempDir()
-	schemaRepo := filepath.Join(tmp, "sfgma")
+	schemaRepo := filepath.Join(tmp, "sfborg_sfda")
 
 	path = filepath.Join(path, "sfborg", "from", "dwca")
 	res := Config{
-		RootPath:   path,
-		JobsNum:    jobsNum,
-		SchemaRepo: schemaRepo,
+		RepoURL:  repoURL,
+		RepoTag:  repoTag,
+		RepoPath: schemaRepo,
+		RootPath: path,
+		JobsNum:  jobsNum,
 	}
 
 	for _, opt := range opts {
 		opt(&res)
 	}
 
-	res.SchemaPath = filepath.Join(res.RootPath, "db")
+	res.DBPath = filepath.Join(res.RootPath, "db")
 	res.DumpPath = filepath.Join(res.RootPath, "dump")
 	return res
 }
