@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Add [#4]: ingest DwCA file.
 Add [#3]: import schema to sqlite work database.
 Add [#2]: fetsch corresponding SFGA schema.
 Add [#1]: create empty interfaces.
