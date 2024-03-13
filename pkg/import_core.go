@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/gnames/dwca/pkg/ent/meta"
 	"github.com/gnames/gnparser"
 	"github.com/gnames/gnparser/ent/parsed"
 	"github.com/gnames/gnuuid"
@@ -76,6 +77,16 @@ func (f *fdwca) writeCoreData(
 	return nil
 }
 
+func fieldsMap(fields []meta.Field) map[string]int {
+	fieldsMap := make(map[string]int)
+	for _, v := range fields {
+		term := filepath.Base(v.Term)
+		term = strings.ToLower(term)
+		fieldsMap[term] = v.Idx
+	}
+	return fieldsMap
+}
+
 func (fd *fdwca) coreParserWorker(
 	ctx context.Context,
 	chIn chan []string,
@@ -86,12 +97,7 @@ func (fd *fdwca) coreParserWorker(
 		fd.gnpPool <- p
 	}()
 
-	fieldsMap := make(map[string]int)
-	for _, v := range fd.arc.Meta().Core.Fields {
-		term := filepath.Base(v.Term)
-		term = strings.ToLower(term)
-		fieldsMap[term] = v.Idx
-	}
+	fieldsMap := fieldsMap(fd.arc.Meta().Core.Fields)
 	coreID := fd.arc.Meta().Core.ID.Idx
 
 	batch := make([]*core.Data, 0, fd.cfg.BatchSize)
@@ -113,6 +119,13 @@ func (fd *fdwca) coreParserWorker(
 	return nil
 }
 
+func fieldVal(row []string, fielsMap map[string]int, name string) string {
+	if idx, ok := fielsMap[name]; ok {
+		return row[idx]
+	}
+	return ""
+}
+
 func (fd *fdwca) processCoreRow(
 	row []string,
 	p gnparser.GNparser,
@@ -120,16 +133,16 @@ func (fd *fdwca) processCoreRow(
 	fieldsMap map[string]int,
 ) *core.Data {
 	res := core.Data{RecordID: row[idIdx]}
-	name := row[fieldsMap["scientificnamestring"]]
+	name := fieldVal(row, fieldsMap, "scientificnamestring")
 	parsed := p.ParseName(name)
 	addParsedData(&res, parsed)
 	res.RecordID = row[idIdx]
-	res.Classification = row[fieldsMap["breadcrumbnames"]]
-	res.ClassificationIDs = row[fieldsMap["breadcrumbids"]]
-	res.ClassificationRanks = row[fieldsMap["breadcrumbranks"]]
-	res.AcceptedNameUsageID = row[fieldsMap["acceptednameusageid"]]
-	res.NomeclaturalCode = row[fieldsMap["nomenclaturalcode"]]
-	res.Rank = row[fieldsMap["taxonrank"]]
+	res.Classification = fieldVal(row, fieldsMap, "breadcrumbnames")
+	res.ClassificationIDs = fieldVal(row, fieldsMap, "breadcrumbids")
+	res.ClassificationRanks = fieldVal(row, fieldsMap, "breadcrumbranks")
+	res.AcceptedNameUsageID = fieldVal(row, fieldsMap, "acceptednameusageid")
+	res.NomeclaturalCode = fieldVal(row, fieldsMap, "nomenclaturalcode")
+	res.Rank = fieldVal(row, fieldsMap, "taxonrank")
 
 	return &res
 }

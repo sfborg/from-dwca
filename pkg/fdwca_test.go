@@ -24,7 +24,7 @@ func TestGetDwca(t *testing.T) {
 func TestImportDwCA(t *testing.T) {
 	assert := assert.New(t)
 	var err error
-	path := filepath.Join("testdata", "dwca", "gymnodiniales.tar.gz")
+	path := filepath.Join("testdata", "dwca", "aos-birds.tar.gz")
 	cfg := config.New()
 
 	err = sysio.New(cfg).Init()

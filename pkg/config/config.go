@@ -11,7 +11,7 @@ var (
 	repoURL = "https://github.com/sfborg/sfga"
 
 	// tag of the sfga repo to get correct schema version.
-	repoTag = "v1.2.0"
+	repoTag = "v1.2.1"
 
 	// jobsNum is the default number of concurrent jobs to run.
 	jobsNum = 5

@@ -116,13 +116,15 @@ github.com/fsnotify/fsnotify v1.5.1/go.mod h1:T3375wBYaZdLLcVNkcVbzGHY7f1l/uK5T5
 github.com/fsnotify/fsnotify v1.7.0 h1:8JEhPFa5W2WU7YfeZzPNqzMP6Lwt7L2715Ggo0nosvA=
 github.com/fsnotify/fsnotify v1.7.0/go.mod h1:40Bi/Hjc2AVfZrqy+aj+yEI+/bRxZnMJyTJwOpGvigM=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
+github.com/gnames/dwca v0.2.3 h1:0Y5Yih/twfjI7XYpga6he6EJvWlbarY9orODWY/OqXc=
+github.com/gnames/dwca v0.2.3/go.mod h1:WrTCp/CM9DzwXrBJ1KqAzAN+PON/klwc+5ZG/i3Wwvg=
 github.com/gnames/gncsv v0.0.1 h1:5+9Abalo/TJZBGVdAhFKv0UX529AqPBqOblEKc88kVw=
 github.com/gnames/gncsv v0.0.1/go.mod h1:G2H7gVTZYddy68Me5pByl+dH2hf5N8w0SDgGwa7Jbjc=
 github.com/gnames/gnfmt v0.1.0/go.mod h1:WG9c3CoiVrGc1SDsxLk7zjmv2B4UIzI00m4K5Khc/d0=
 github.com/gnames/gnfmt v0.4.3 h1:TUbqT+2KsC7qdo2lUICw9vOx2tBDF80ehvBrLZaMMR0=
 github.com/gnames/gnfmt v0.4.3/go.mod h1:Nnxb1w0jh+8cit4gVkfSKqH2lA2chImkvSiDvAFhJes=
-github.com/gnames/gnlib v0.32.0 h1:4YtiOWxkdxrwgBhwE9/jdUTHmQ7qu8zsQmJ5gq3ccrE=
-github.com/gnames/gnlib v0.32.0/go.mod h1:NpOFjiabjkMM/S/C8semOLlMwH5qc/hqyIGBg5Ty+vA=
+github.com/gnames/gnlib v0.33.0 h1:nEOvii9gR6UXD8X77VpkSltP8jkTpPb77+fkjBukn7E=
+github.com/gnames/gnlib v0.33.0/go.mod h1:MbAXGtgFwWakNImNqCXrU36mNeP1mu8zDhOI6Tq38fk=
 github.com/gnames/gnparser v1.9.0 h1:R5njjcmT9+6sFYvGqb77jaPvvalzJgcHhor+l3MXhUo=
 github.com/gnames/gnparser v1.9.0/go.mod h1:wpamBRAIxYGBbAwnhgUTeH6qMRomiRNSb5WrreDtE/4=
 github.com/gnames/gnsys v0.2.4 h1:kxqeojKFw/JL3g7cwsnXB+8N+L2DUxKpop4T8Rq0We4=
