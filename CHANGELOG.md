@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Add [#8]: export sfga to a dump file.
+Add [#7]: ingest data_source data to sfga.
+Add [#6]: ingest vernacular names to sfga.
+Add [#5]: ingest Core to sfga.
 Add [#4]: ingest DwCA file.
 Add [#3]: import schema to sqlite work database.
 Add [#2]: fetsch corresponding SFGA schema.

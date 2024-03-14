@@ -61,12 +61,17 @@ func (fd *fdwca) GetDwCA(fileDwCA string) (dwca.Archive, error) {
 
 func (fd *fdwca) ImportDwCA(arc dwca.Archive) error {
 	fd.arc = arc
-	err := fd.importCore()
+	num, err := fd.importCore()
 	if err != nil {
 		return err
 	}
 
 	err = fd.importExtensions(arc)
+	if err != nil {
+		return err
+	}
+
+	err = fd.importEML(arc.EML(), num)
 	if err != nil {
 		return err
 	}

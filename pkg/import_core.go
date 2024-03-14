@@ -15,7 +15,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func (fd *fdwca) importCore() error {
+func (fd *fdwca) importCore() (int, error) {
 	chIn := make(chan []string)
 	chOut := make(chan []*core.Data)
 
@@ -43,15 +43,15 @@ func (fd *fdwca) importCore() error {
 		close(chOut)
 	}()
 
-	err := fd.arc.CoreStream(ctx, chIn)
+	num, err := fd.arc.CoreStream(ctx, chIn)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	if err := g.Wait(); err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return num, nil
 }
 
 func (f *fdwca) writeCoreData(
