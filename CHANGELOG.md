@@ -5,6 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.1] - 2024-03-15 Fri
+
+Add [#9]: ability to download DwCA from URL.
 Add [#8]: export sfga to a dump file.
 Add [#7]: ingest data_source data to sfga.
 Add [#6]: ingest vernacular names to sfga.
@@ -25,6 +28,16 @@ This document follows [changelog guidelines]
 [v0.0.1]: https://github.com/sfborg/from-dwca/compare/v0.0.0...v0.0.1
 [v0.0.0]: https://github.com/sfborg/from-dwca/tree/v0.0.0
 
+[#20]: https://github.com/sfborg/from-dwca/issues/20
+[#19]: https://github.com/sfborg/from-dwca/issues/19
+[#18]: https://github.com/sfborg/from-dwca/issues/18
+[#17]: https://github.com/sfborg/from-dwca/issues/17
+[#16]: https://github.com/sfborg/from-dwca/issues/16
+[#15]: https://github.com/sfborg/from-dwca/issues/15
+[#14]: https://github.com/sfborg/from-dwca/issues/14
+[#13]: https://github.com/sfborg/from-dwca/issues/13
+[#12]: https://github.com/sfborg/from-dwca/issues/12
+[#11]: https://github.com/sfborg/from-dwca/issues/11
 [#10]: https://github.com/sfborg/from-dwca/issues/10
 [#9]: https://github.com/sfborg/from-dwca/issues/9
 [#8]: https://github.com/sfborg/from-dwca/issues/8

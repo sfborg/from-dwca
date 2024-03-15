@@ -34,7 +34,8 @@ func New(cfg config.Config, stor stor.Storage) FromDwCA {
 }
 
 func (fd *fdwca) GetDwCA(fileDwCA string) (dwca.Archive, error) {
-	dwcaCfg := dwcacfg.New()
+	opts := []dwcacfg.Option{dwcacfg.OptJobsNum(fd.cfg.JobsNum)}
+	dwcaCfg := dwcacfg.New(opts...)
 	arc, err := dwca.Factory(fileDwCA, dwcaCfg)
 	if err != nil {
 		return nil, err
