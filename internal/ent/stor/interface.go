@@ -11,5 +11,7 @@ type Storage interface {
 	InsertCoreData(data []*core.Data) error
 	InsertVernData(data []*vern.Data) error
 	InsertDataSource(data *ds.DataSource) error
+	Exists() bool
+	DumpSFGA(outPath string) error
 	Close() error
 }

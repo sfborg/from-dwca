@@ -1,9 +1,11 @@
 package fdwca_test
 
 import (
+	"os"
 	"path/filepath"
 	"testing"
 
+	"github.com/gnames/gnsys"
 	"github.com/sfborg/from-dwca/internal/io/storio"
 	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
@@ -40,4 +42,43 @@ func TestImportDwCA(t *testing.T) {
 	assert.NotNil(arc.Meta())
 	err = fd.ImportDwCA(arc)
 	assert.Nil(err)
+}
+
+func TestOutSFGA(t *testing.T) {
+	assert := assert.New(t)
+	var err error
+	var exists bool
+
+	path := filepath.Join("testdata", "dwca", "gymnodiniales.tar.gz")
+	cfg := config.New()
+
+	err = sysio.New(cfg).Init()
+	assert.Nil(err)
+
+	stor := storio.New(cfg)
+	err = stor.Init()
+	assert.Nil(err)
+
+	fd := fdwca.New(cfg, stor)
+
+	err = fd.OutSFGA("test")
+	assert.NotNil(err)
+
+	arc, err := fd.GetDwCA(path)
+	assert.Nil(err)
+	assert.NotNil(arc.Meta())
+	err = fd.ImportDwCA(arc)
+	assert.Nil(err)
+
+	outPath := filepath.Join(os.TempDir(), "sfga.zip")
+	exists, err = gnsys.FileExists(outPath)
+	assert.Nil(err)
+	assert.False(exists)
+
+	err = fd.OutSFGA(outPath)
+	assert.Nil(err)
+	exists, err = gnsys.FileExists(outPath)
+	assert.Nil(err)
+	assert.True(exists)
+	os.Remove(outPath)
 }

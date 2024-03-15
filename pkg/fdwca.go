@@ -1,6 +1,9 @@
 package fdwca
 
 import (
+	"errors"
+	"path/filepath"
+
 	dwca "github.com/gnames/dwca/pkg"
 	dwcacfg "github.com/gnames/dwca/pkg/config"
 	"github.com/gnames/gnparser"
@@ -80,5 +83,20 @@ func (fd *fdwca) ImportDwCA(arc dwca.Archive) error {
 }
 
 func (f *fdwca) OutSFGA(path string) error {
+	var err error
+	if !f.checkSFGA() {
+		return errors.New("SFGA not found")
+	}
+
+	ext := filepath.Ext(path)
+	if ext != ".zip" {
+		path = path + ".zip"
+	}
+
+	err = f.stor.DumpSFGA(path)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

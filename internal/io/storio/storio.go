@@ -43,7 +43,6 @@ func (s *storio) Init() error {
 	fmt.Println()
 
 	cmd := exec.Command("sqlite3", dbFile, read)
-	fmt.Printf("CMD %s\n\n", cmd)
 	err = cmd.Run()
 	if err != nil {
 		slog.Error("Cannot import database using schema", "error", err)
