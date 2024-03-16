@@ -2,6 +2,7 @@ package fdwca
 
 import (
 	"context"
+	"log/slog"
 	"path/filepath"
 	"strings"
 
@@ -71,6 +72,7 @@ func (fd *fdwca) vernWorker(
 	for v := range chIn {
 		vrn := fd.processVernRow(v, coreID, fieldsMap)
 		if vrn == nil {
+			slog.Warn("Vernacular name is empty", "row", v)
 			continue
 		}
 		if len(batch) == fd.cfg.BatchSize {
