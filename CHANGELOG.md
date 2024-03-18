@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Add: update dwca to 0.2.6 to skip normalization for already normalized files.
+
 ## [v0.0.1] - 2024-03-15 Fri
 
 Add [#9]: ability to download DwCA from URL.
