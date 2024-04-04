@@ -4,7 +4,7 @@ Converts DwCA data into SQLite database according to sfgma schema.
 
 ## Install
 
-Copy from the [latest release] compressed file for your operating system,
+Copy from the [latest release] a compressed file for your operating system,
 extract `from-dwca` file and place it somewhere in your `PATH`.
 
 ## Usage
