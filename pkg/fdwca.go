@@ -90,8 +90,12 @@ func (f *fdwca) OutSFGA(path string) error {
 	}
 
 	ext := filepath.Ext(path)
-	if ext != ".zip" {
-		path = path + ".zip"
+	if f.cfg.WithSqlOutput && ext != ".sql" {
+		path = path + ".sql"
+	}
+
+	if !f.cfg.WithSqlOutput && ext != ".sqlite" {
+		path = path + ".sqlite"
 	}
 
 	err = f.stor.DumpSFGA(path)

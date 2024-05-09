@@ -29,6 +29,13 @@ func rootDirFlag(cmd *cobra.Command) {
 	}
 }
 
+func sqlFlag(cmd *cobra.Command) {
+	b, _ := cmd.Flags().GetBool("sql-output")
+	if b {
+		opts = append(opts, config.OptWithSqlOutput(b))
+	}
+}
+
 func jobsNumFlag(cmd *cobra.Command) {
 	jobs, _ := cmd.Flags().GetInt("jobs-number")
 	if jobs > 0 {

@@ -27,9 +27,44 @@ func (s *storio) Exists() bool {
 }
 
 func (s *storio) DumpSFGA(outPath string) error {
-	dumpFile := filepath.Join(s.cfg.DBPath, "sfga.sql")
+	var err error
+	dumpFile := outPath
 	dbFile := filepath.Join(s.cfg.DBPath, "sfga.db")
 
+	if s.cfg.WithSqlOutput {
+		err = dumpSQL(dbFile, dumpFile)
+	} else {
+		err = dumpBinary(dbFile, dumpFile)
+	}
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func dumpBinary(dbFile, dumpFile string) error {
+	f, err := os.Open(dbFile)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	w, err := os.Create(dumpFile)
+	if err != nil {
+		return err
+	}
+	defer w.Close()
+
+	_, err = io.Copy(w, f)
+	if err != nil {
+		return err
+	}
+	slog.Info("SQLite database file is created", "file", dumpFile)
+	return nil
+}
+
+func dumpSQL(dbFile, dumpFile string) error {
 	cmd := exec.Command("sqlite3", dbFile, ".dump")
 	dumpWriter, err := os.Create(dumpFile)
 	if err != nil {
@@ -47,41 +82,10 @@ func (s *storio) DumpSFGA(outPath string) error {
 		return err
 	}
 
-	slog.Info("Creating zip file", "file", outPath)
-	err = s.Zip(dumpFile, outPath)
-	if err != nil {
-		return err
-	}
-
-	slog.Info("Zip file created", "file", outPath)
+	slog.Info("SQLite SQL file is created", "file", dumpFile)
 
 	return nil
 }
-
-// 	dumpFile := filepath.Join(s.cfg.DBPath, "sfga.sql")
-// 	dbFile := filepath.Join(s.cfg.DBPath, "sfga.db")
-//
-// 	dump := fmt.Sprintf("sqlite3 %s .dump > %s", dbFile, dumpFile)
-// 	cmd := exec.Command("sqlite3", dbFile, ".dump")
-// 	err := cmd.Run()
-// 	if err != nil {
-// 		return err
-// 	}
-//
-// 	dumpWriter, err := cmd.StdoutPipe()
-// 	if err != nil {
-// 		return fmt.Errorf("error creating dump pipe: %w", err)
-// 	}
-//
-// 	slog.Info("Creating zip file", "file", outPath)
-// 	err = s.Zip(dumpFile, outPath)
-// 	if err != nil {
-// 		return err
-// 	}
-//
-// 	slog.Info("Zip file created", "file", outPath)
-// 	return nil
-// }
 
 func (s *storio) Zip(inputPath, outputPath string) error {
 	zipFile, err := os.Create(outputPath)
@@ -93,13 +97,13 @@ func (s *storio) Zip(inputPath, outputPath string) error {
 	zipWriter := zip.NewWriter(zipFile)
 	defer zipWriter.Close()
 
-	f, err := os.Open(inputPath)
+	w, err := os.Open(inputPath)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer w.Close()
 
-	fileInfo, err := f.Stat()
+	fileInfo, err := w.Stat()
 	if err != nil {
 		return err
 	}
@@ -116,7 +120,7 @@ func (s *storio) Zip(inputPath, outputPath string) error {
 		return err
 	}
 
-	_, err = io.Copy(writer, f)
+	_, err = io.Copy(writer, w)
 	if err != nil {
 		return err
 	}

@@ -121,6 +121,9 @@ func (fd *fdwca) coreParserWorker(
 
 func fieldVal(row []string, fielsMap map[string]int, name string) string {
 	if idx, ok := fielsMap[name]; ok {
+		if idx >= len(row) {
+			return ""
+		}
 		return row[idx]
 	}
 	return ""

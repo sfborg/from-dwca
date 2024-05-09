@@ -46,6 +46,9 @@ type Config struct {
 
 	// InMemory is a flag to use in-memory sqlite database.
 	InMemory bool
+
+	// WithSqlOutput is a flag to output SQL dump instead of SQLite binary.
+	WithSqlOutput bool
 }
 
 // Option is a function type that allows to standardize how options to
@@ -85,6 +88,12 @@ func OptJobsNum(n int) Option {
 			n = jobsNum
 		}
 		c.JobsNum = n
+	}
+}
+
+func OptWithSqlOutput(b bool) Option {
+	return func(c *Config) {
+		c.WithSqlOutput = b
 	}
 }
 

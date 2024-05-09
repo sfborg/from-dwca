@@ -24,6 +24,7 @@ package cmd
 import (
 	"log/slog"
 	"os"
+	"path/filepath"
 
 	dwca "github.com/gnames/dwca/pkg"
 	"github.com/sfborg/from-dwca/internal/io/storio"
@@ -37,7 +38,7 @@ var opts []config.Option
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "from-dwca",
+	Use:   "from-dwca <dwca_file_or_url> <output_file>",
 	Short: "Converts Darwin Core Archive to Species File Group Archive.",
 	Long: `Takes path to a Darwin Core Archive, extracts data and metadata,
 and converts it to Species File Group Archive. The database schema is created
@@ -45,7 +46,10 @@ based on a version of sgma schema.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		versionFlag(cmd)
-		flags := []flagFunc{debugFlag, rootDirFlag, jobsNumFlag, inMemoryFlag}
+		flags := []flagFunc{
+			debugFlag, rootDirFlag,
+			jobsNumFlag, inMemoryFlag, sqlFlag,
+		}
 		for _, v := range flags {
 			v(cmd)
 		}
@@ -58,6 +62,12 @@ based on a version of sgma schema.`,
 		slog.Info("Converting DwCA to SFGA")
 		dwcaPath := args[0]
 		outputPath := args[1]
+
+		ext := filepath.Ext(outputPath)
+		if ext == ".sql" {
+			opts = append(opts, config.OptWithSqlOutput(true))
+		}
+
 		cfg := config.New(opts...)
 		err = sysio.New(cfg).Init()
 		if err != nil {
@@ -81,21 +91,21 @@ based on a version of sgma schema.`,
 			os.Exit(1)
 		}
 
-		slog.Info("Exporting data to SQLite", "file", dwcaPath)
+		slog.Info("Exporting data to SQLite")
 		err = fd.ImportDwCA(arc)
 		if err != nil {
 			slog.Error("Cannot export data", "error", err)
 			os.Exit(1)
 		}
 
-		slog.Info("Making SFG Archive", "file", dwcaPath)
+		slog.Info("Making SFG Archive")
 		err = fd.OutSFGA(outputPath)
 		if err != nil {
 			slog.Error("Cannot dump data", "error", err)
 			os.Exit(1)
 		}
 
-		slog.Info("DwCA data has been imported successfully", "file", dwcaPath)
+		slog.Info("DwCA data has been imported successfully")
 	},
 }
 
@@ -120,5 +130,6 @@ func init() {
 	rootCmd.Flags().BoolP("debug", "d", false, "set debug mode")
 	rootCmd.Flags().StringP("root-dir", "r", "", "root directory for temporary files")
 	rootCmd.Flags().IntP("jobs-number", "j", 0, "number of concurrent jobs")
+	rootCmd.Flags().BoolP("sql-output", "s", false, "return sql, text-only dump")
 	rootCmd.Flags().BoolP("in-memory", "m", false, "set sqlite database in memory")
 }
