@@ -132,4 +132,5 @@ func init() {
 	rootCmd.Flags().IntP("jobs-number", "j", 0, "number of concurrent jobs")
 	rootCmd.Flags().BoolP("sql-output", "s", false, "return sql, text-only dump")
 	rootCmd.Flags().BoolP("in-memory", "m", false, "set sqlite database in memory")
+	rootCmd.Flags().BoolP("version", "V", false, "shows app's version")
 }

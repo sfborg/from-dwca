@@ -1,19 +1,19 @@
 module github.com/sfborg/from-dwca
 
-go 1.22.1
+go 1.22.4
 
 require (
 	github.com/gnames/dwca v0.2.6
-	github.com/gnames/gnlib v0.33.0
-	github.com/gnames/gnparser v1.9.0
+	github.com/gnames/gnlib v0.43.0
+	github.com/gnames/gnparser v1.9.2
 	github.com/gnames/gnsys v0.3.2
-	github.com/gnames/gnuuid v0.1.1
+	github.com/gnames/gnuuid v0.1.2
 	github.com/lmittmann/tint v1.0.4
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/cobra-cli v1.3.0
 	github.com/stretchr/testify v1.9.0
-	golang.org/x/sync v0.6.0
-	modernc.org/sqlite v1.29.3
+	golang.org/x/sync v0.7.0
+	modernc.org/sqlite v1.30.1
 )
 
 require (
@@ -27,7 +27,7 @@ require (
 	github.com/gnames/gnfmt v0.4.3 // indirect
 	github.com/gnames/organizer v0.1.1 // indirect
 	github.com/gnames/tribool v0.1.1 // indirect
-	github.com/google/uuid v1.4.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -44,7 +44,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
-	github.com/rs/zerolog v1.30.0 // indirect
+	github.com/rs/zerolog v1.32.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
@@ -57,15 +57,15 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/exp v0.0.0-20231108232855-2478ac86f678 // indirect
-	golang.org/x/net v0.19.0 // indirect
-	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/net v0.24.0 // indirect
+	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/gc/v3 v3.0.0-20240107210532-573471604cb6 // indirect
-	modernc.org/libc v1.41.0 // indirect
+	modernc.org/libc v1.52.1 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
-	modernc.org/memory v1.7.2 // indirect
+	modernc.org/memory v1.8.0 // indirect
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )

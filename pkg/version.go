@@ -2,17 +2,10 @@ package fdwca
 
 import "github.com/gnames/gnlib/ent/gnvers"
 
-var (
-	// Version of the app. Hardcoded version appears only in release builds.
-	Version = "v0.0.1"
+var Version = "v0.0.3"
+var Build = "n/a"
 
-	// Build timestamp
-	Build string
-)
-
+// GetVersion returns BHLnames version and build information.
 func GetVersion() gnvers.Version {
-	return gnvers.Version{
-		Version: Version,
-		Build:   Build,
-	}
+	return gnvers.Version{Version: Version, Build: Build}
 }

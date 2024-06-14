@@ -6,7 +6,7 @@ DATE = $(shell TZ=UTC date +'%Y-%m-%d_%H:%M:%ST%Z')
 
 NO_C = CGO_ENABLED=0
 FLAGS_LD = -ldflags "-X github.com/sfborg/$(PROJ_NAME)/pkg.Build=$(DATE) \
-                     -X github.com/sfborg/$(PROJ_NAME)/pkg.Vers=$(VERSION)"
+                     -X github.com/sfborg/$(PROJ_NAME)/pkg.Version=$(VERSION)"
 FLAGS_REL = -trimpath -ldflags "-s -w -X github.com/sfborg/$(PROJ_NAME)/pkg.Build=$(DATE)"
 FLAGS_SHARED = $(NO_C) GOARCH=amd64
 FLAGS_LINUX = $(FLAGS_SHARED) GOOS=linux
