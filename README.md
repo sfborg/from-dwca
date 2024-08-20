@@ -28,5 +28,3 @@ sqlite> .schema
 ```
 
 [latest release]: https://github.com/sfborg/from-dwca/releases/latest
-
-

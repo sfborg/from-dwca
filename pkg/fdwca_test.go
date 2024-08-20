@@ -10,6 +10,7 @@ import (
 	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
+	"github.com/sfborg/sflib/io/sfgaio"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -32,7 +33,9 @@ func TestImportDwCA(t *testing.T) {
 	err = sysio.New(cfg).Init()
 	assert.Nil(err)
 
-	stor := storio.New(cfg)
+	sfga := sfgaio.New(cfg.GitRepo, cfg.TempRepoPath)
+
+	stor := storio.New(cfg, sfga)
 	err = stor.Init()
 	assert.Nil(err)
 
@@ -55,7 +58,9 @@ func TestOutSFGA(t *testing.T) {
 	err = sysio.New(cfg).Init()
 	assert.Nil(err)
 
-	stor := storio.New(cfg)
+	sfga := sfgaio.New(cfg.GitRepo, cfg.TempRepoPath)
+
+	stor := storio.New(cfg, sfga)
 	err = stor.Init()
 	assert.Nil(err)
 
@@ -77,7 +82,8 @@ func TestOutSFGA(t *testing.T) {
 
 	err = fd.OutSFGA(outPath)
 	assert.Nil(err)
-	exists, err = gnsys.FileExists(outPath)
+
+	exists, err = gnsys.FileExists(outPath + ".sqlite")
 	assert.Nil(err)
 	assert.True(exists)
 	os.Remove(outPath)

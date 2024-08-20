@@ -4,6 +4,8 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+
+	"github.com/sfborg/sflib/ent/sfga"
 )
 
 var (
@@ -13,6 +15,9 @@ var (
 	// tag of the sfga repo to get correct schema version.
 	repoTag = "v1.2.1"
 
+	// schemaHash is the sha256 sum of the correponding schema version.
+	schemaHash = "e84cc873"
+
 	// jobsNum is the default number of concurrent jobs to run.
 	jobsNum = 5
 )
@@ -20,14 +25,11 @@ var (
 // Config is a configuration object for the Darwin Core Archive (DwCA)
 // data processing.
 type Config struct {
-	// RepoURL is the URL to the SFGA schema repository.
-	RepoURL string
+	// GitRepo contains data for sfga schema Git repository.
+	sfga.GitRepo
 
-	// RepoPath is a temporary location to schema files downloaded from GitHub.
-	RepoPath string
-
-	// RepoTag is a tag of the SFGA repository to use.
-	RepoTag string
+	// TempRepoPath is a temporary location to schema files downloaded from GitHub.
+	TempRepoPath string
 
 	// RootPath is the root path for all temporary files.
 	RootPath string
@@ -117,12 +119,15 @@ func New(opts ...Option) Config {
 	schemaRepo := filepath.Join(tmp, "sfborg_sfda")
 
 	res := Config{
-		RepoURL:   repoURL,
-		RepoTag:   repoTag,
-		RepoPath:  schemaRepo,
-		RootPath:  path,
-		JobsNum:   jobsNum,
-		BatchSize: 50_000,
+		GitRepo: sfga.GitRepo{
+			URL:          repoURL,
+			Tag:          repoTag,
+			ShaSchemaSQL: schemaHash,
+		},
+		TempRepoPath: schemaRepo,
+		RootPath:     path,
+		JobsNum:      jobsNum,
+		BatchSize:    50_000,
 	}
 
 	for _, opt := range opts {

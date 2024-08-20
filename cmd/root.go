@@ -31,6 +31,7 @@ import (
 	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
+	"github.com/sfborg/sflib/io/sfgaio"
 	"github.com/spf13/cobra"
 )
 
@@ -74,7 +75,10 @@ based on a version of sgma schema.`,
 			slog.Error("Cannot initialize file system", "error", err)
 			os.Exit(1)
 		}
-		stor := storio.New(cfg)
+
+		sfga := sfgaio.New(cfg.GitRepo, cfg.TempRepoPath)
+
+		stor := storio.New(cfg, sfga)
 		err = stor.Init()
 		if err != nil {
 			slog.Error("Cannot initialize storage", "error", err)

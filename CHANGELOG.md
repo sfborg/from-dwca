@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.3] - 2024-08-21 Wed
+
+Add [#10]: sfga is now in sflib.
+
 ## [v0.0.2] - 2024-04-04 Thu
 
 Add: update dwca to 0.2.6 to skip normalization for already normalized files.
@@ -32,7 +36,6 @@ This document follows [changelog guidelines]
 [v0.0.2]: https://github.com/sfborg/from-dwca/compare/v0.0.1...v0.0.2
 [v0.0.1]: https://github.com/sfborg/from-dwca/compare/v0.0.0...v0.0.1
 [v0.0.0]: https://github.com/sfborg/from-dwca/tree/v0.0.0
-
 [#20]: https://github.com/sfborg/from-dwca/issues/20
 [#19]: https://github.com/sfborg/from-dwca/issues/19
 [#18]: https://github.com/sfborg/from-dwca/issues/18
@@ -53,5 +56,4 @@ This document follows [changelog guidelines]
 [#3]: https://github.com/sfborg/from-dwca/issues/3
 [#2]: https://github.com/sfborg/from-dwca/issues/2
 [#1]: https://github.com/sfborg/from-dwca/issues/1
-
 [changelog guidelines]: https://keepachangelog.com/en/1.0.0/

@@ -1,6 +1,6 @@
 module github.com/sfborg/from-dwca
 
-go 1.22.4
+go 1.22.5
 
 require (
 	github.com/gnames/dwca v0.2.6
@@ -9,6 +9,7 @@ require (
 	github.com/gnames/gnsys v0.3.2
 	github.com/gnames/gnuuid v0.1.2
 	github.com/lmittmann/tint v1.0.4
+	github.com/sfborg/sflib v0.1.0
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/cobra-cli v1.3.0
 	github.com/stretchr/testify v1.9.0

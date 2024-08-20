@@ -9,24 +9,25 @@ import (
 	"path/filepath"
 
 	"github.com/sfborg/from-dwca/internal/ent/stor"
-	"github.com/sfborg/from-dwca/internal/io/repoio"
 	"github.com/sfborg/from-dwca/pkg/config"
+	"github.com/sfborg/sflib/ent/sfga"
 	_ "modernc.org/sqlite"
 )
 
 type storio struct {
-	cfg config.Config
-	db  *sql.DB
+	cfg  config.Config
+	sfga sfga.SFGA
+	db   *sql.DB
 }
 
-func New(cfg config.Config) stor.Storage {
-	return &storio{cfg: cfg}
+func New(cfg config.Config, sfga sfga.SFGA) stor.Storage {
+	return &storio{cfg: cfg, sfga: sfga}
 }
 
 func (s *storio) Init() error {
-	r := repoio.New(s.cfg)
-	schema, err := r.FetchSchema()
+	schema, err := s.sfga.FetchSchema()
 	if err != nil {
+		slog.Error("Cannot fetch schema", "error", err)
 		return err
 	}
 

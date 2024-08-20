@@ -30,7 +30,7 @@ YELLOW := $(shell tput -Txterm setaf 3)
 WHITE  := $(shell tput -Txterm setaf 7)
 RESET  := $(shell tput -Txterm sgr0)
 
-.PHONY: all deps build clean
+.PHONY: all deps build clean mod
 
 all: install
 
@@ -41,6 +41,9 @@ deps: ## Download dependencies
 ## Tools
 tools: deps ## Install tools
 	@cat tools.go | grep _ | awk -F'"' '{print $$2}' | xargs -tI % go install %
+
+mod: ## Update modules
+        GOSUMDB=off $(GOCMD) mod tidy;
 
 ## Build:
 build: ## Build binary
