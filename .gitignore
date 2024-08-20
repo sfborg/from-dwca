@@ -7,6 +7,9 @@
 *.dll
 *.so
 *.dylib
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 
 # Test binary, built with `go test -c`
 *.test
