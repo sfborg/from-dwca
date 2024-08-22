@@ -44,23 +44,15 @@ func (s *storio) DumpSFGA(outPath string) error {
 }
 
 func dumpBinary(dbFile, dumpFile string) error {
-	f, err := os.Open(dbFile)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
+	var err error
+	cmd := exec.Command("sqlite3", dbFile, ".backup "+dumpFile)
 
-	w, err := os.Create(dumpFile)
-	if err != nil {
+	if err = cmd.Run(); err != nil {
 		return err
 	}
-	defer w.Close()
 
-	_, err = io.Copy(w, f)
-	if err != nil {
-		return err
-	}
-	slog.Info("SQLite database file is created", "file", dumpFile)
+	slog.Info("SQLite binary file is created", "file", dumpFile)
+
 	return nil
 }
 
