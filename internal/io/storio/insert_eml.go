@@ -13,7 +13,7 @@ func (s *storio) InsertDataSource(data *ds.DataSource) error {
 	}
 
 	stmt, err := tx.Prepare(`
-	INSERT OR IGNORE INTO data_sources (
+	INSERT OR IGNORE INTO data_source (
 			id, gn_id, title, title_short, version, revision_date,
 		  doi, citation, authors, description, website_url, data_url,
 		  record_count, updated_at

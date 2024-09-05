@@ -13,10 +13,10 @@ var (
 	repoURL = "https://github.com/sfborg/sfga"
 
 	// tag of the sfga repo to get correct schema version.
-	repoTag = "v1.2.1"
+	repoTag = "v1.2.6"
 
 	// schemaHash is the sha256 sum of the correponding schema version.
-	schemaHash = "e84cc873"
+	schemaHash = "f863ecadb42"
 
 	// jobsNum is the default number of concurrent jobs to run.
 	jobsNum = 5
@@ -93,6 +93,7 @@ func OptJobsNum(n int) Option {
 	}
 }
 
+// OptWithSqlOutput sets output as text-only SQL file.
 func OptWithSqlOutput(b bool) Option {
 	return func(c *Config) {
 		c.WithSqlOutput = b
@@ -109,14 +110,14 @@ func OptInMemory(b bool) Option {
 // New creates a new Config object with default values, and allows to
 // override them with options.
 func New(opts ...Option) Config {
+	tmpDir := os.TempDir()
 	path, err := os.UserCacheDir()
 	if err != nil {
-		path = os.TempDir()
+		path = tmpDir
 	}
 	path = filepath.Join(path, "sfborg")
 
-	tmp := os.TempDir()
-	schemaRepo := filepath.Join(tmp, "sfborg_sfda")
+	schemaRepo := filepath.Join(tmpDir, "sfborg_sfda")
 
 	res := Config{
 		GitRepo: sfga.GitRepo{

@@ -12,8 +12,7 @@ extract `from-dwca` file and place it somewhere in your `PATH`.
 Use DwCA file or URL to convert it to sqlite SQL dump:
 
 ```bash
-from-dwca http://opendata.globalnames.org/dwca/174-mammal-sp-2018-08-04.tar.gz db.sql.zip
-unzip db.sql.zip
+from-dwca http://opendata.globalnames.org/dwca/174-mammal-sp-2018-08-04.tar.gz db.sql
 ## it will extract a sfga.sql file
 ```
 
