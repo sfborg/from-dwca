@@ -49,6 +49,9 @@ type Config struct {
 	// WithBinOutput is a flag to output binary SQLite database instead of
 	// SQL dump.
 	WithBinOutput bool
+
+	// WithZipOutput is a flag to return zipped SFGAarchive outpu.
+	WithZipOutput bool
 }
 
 // Option is a function type that allows to standardize how options to
@@ -84,10 +87,17 @@ func OptJobsNum(n int) Option {
 	}
 }
 
-// OptWithSqlOutput sets output as binary SQLite file.
-func OptWithSqlOutput(b bool) Option {
+// OptWithBinOutput sets output as binary SQLite file.
+func OptWithBinOutput(b bool) Option {
 	return func(c *Config) {
 		c.WithBinOutput = b
+	}
+}
+
+// OptWithZipOutput sets output as binary SQLite file.
+func OptWithZipOutput(b bool) Option {
+	return func(c *Config) {
+		c.WithZipOutput = b
 	}
 }
 

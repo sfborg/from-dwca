@@ -47,7 +47,7 @@ func (fd *fdwca) importVernacular(idx int, ext *meta.Extension) error {
 		return fd.writeVernData(ctx, chOut)
 	})
 
-	_, err := fd.arc.ExtensionStream(ctx, idx, chIn)
+	_, err := fd.d.ExtensionStream(ctx, idx, chIn)
 	if err != nil {
 		return err
 	}
@@ -118,7 +118,7 @@ func (fd *fdwca) writeVernData(
 	var err error
 	for cd := range chOut {
 		// write to db
-		err = fd.stor.InsertVernData(cd)
+		err = fd.s.InsertVern(cd)
 		if err != nil {
 			for range chOut {
 			}

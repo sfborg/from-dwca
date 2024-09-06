@@ -43,7 +43,7 @@ func (fd *fdwca) importCore() (int, error) {
 		close(chOut)
 	}()
 
-	num, err := fd.arc.CoreStream(ctx, chIn)
+	num, err := fd.d.CoreStream(ctx, chIn)
 	if err != nil {
 		return 0, err
 	}
@@ -61,7 +61,7 @@ func (f *fdwca) writeCoreData(
 	var err error
 	for cd := range chOut {
 		// write to db
-		err = f.stor.InsertCoreData(cd)
+		err = f.s.InsertCore(cd)
 		if err != nil {
 			for range chOut {
 			}
@@ -97,8 +97,8 @@ func (fd *fdwca) coreParserWorker(
 		fd.gnpPool <- p
 	}()
 
-	fieldsMap := fieldsMap(fd.arc.Meta().Core.Fields)
-	coreID := fd.arc.Meta().Core.ID.Idx
+	fieldsMap := fieldsMap(fd.d.Meta().Core.Fields)
+	coreID := fd.d.Meta().Core.ID.Idx
 
 	batch := make([]*schema.Core, 0, fd.cfg.BatchSize)
 	for v := range chIn {

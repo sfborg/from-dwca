@@ -27,10 +27,11 @@ import (
 	"path/filepath"
 
 	dwca "github.com/gnames/dwca/pkg"
-	"github.com/sfborg/from-dwca/internal/io/storio"
+	"github.com/sfborg/from-dwca/internal/io/sfarcio"
 	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
+	"github.com/sfborg/sflib/io/dbio"
 	"github.com/sfborg/sflib/io/schemaio"
 	"github.com/spf13/cobra"
 )
@@ -48,8 +49,7 @@ based on a version of sgma schema.`,
 		var err error
 		versionFlag(cmd)
 		flags := []flagFunc{
-			debugFlag, rootDirFlag,
-			jobsNumFlag, sqlFlag,
+			debugFlag, cacheDirFlag, jobsNumFlag, binFlag, zipFlag,
 		}
 		for _, v := range flags {
 			v(cmd)
@@ -65,8 +65,8 @@ based on a version of sgma schema.`,
 		outputPath := args[1]
 
 		ext := filepath.Ext(outputPath)
-		if ext == ".sql" {
-			opts = append(opts, config.OptWithSqlOutput(true))
+		if ext == ".sqlite" {
+			opts = append(opts, config.OptWithBinOutput(true))
 		}
 
 		cfg := config.New(opts...)
@@ -77,9 +77,10 @@ based on a version of sgma schema.`,
 		}
 
 		sfgaSchema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
+		sfgaDB := dbio.New(cfg.CacheDbDir)
 
-		stor := storio.New(cfg, sfgaSchema)
-		err = stor.Init()
+		stor := sfarcio.New(cfg, sfgaSchema, sfgaDB)
+		err = stor.Connect()
 		if err != nil {
 			slog.Error("Cannot initialize storage", "error", err)
 			os.Exit(1)
@@ -102,8 +103,8 @@ based on a version of sgma schema.`,
 			os.Exit(1)
 		}
 
-		slog.Info("Making SFG Archive")
-		err = fd.OutSFGA(outputPath)
+		slog.Info("Making SFGArchive")
+		err = fd.ExportSFGA(outputPath)
 		if err != nil {
 			slog.Error("Cannot dump data", "error", err)
 			os.Exit(1)
@@ -123,17 +124,10 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.from-dwca.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
 	rootCmd.Flags().BoolP("debug", "d", false, "set debug mode")
 	rootCmd.Flags().StringP("root-dir", "r", "", "root directory for temporary files")
 	rootCmd.Flags().IntP("jobs-number", "j", 0, "number of concurrent jobs")
-	rootCmd.Flags().BoolP("sql-output", "s", false, "return sql, text-only dump")
+	rootCmd.Flags().BoolP("binary-output", "b", false, "return binary SQLite database")
+	rootCmd.Flags().BoolP("zip-output", "z", false, "compress output with zip")
 	rootCmd.Flags().BoolP("version", "V", false, "shows app's version")
 }

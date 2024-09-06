@@ -13,6 +13,6 @@ type FromDwCA interface {
 	// database.
 	ImportDwCA(arc dwca.Archive) error
 
-	// OutSFGA writes a Species File Group Archive to a file.
-	OutSFGA(outputPath string) error
+	// ExportSFGA writes a Species File Group Archive to a file.
+	ExportSFGA(outputPath string) error
 }

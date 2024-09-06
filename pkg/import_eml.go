@@ -21,7 +21,7 @@ func (fd *fdwca) importEML(data *eml.EML, recNum int) error {
 		RecordCount: recNum,
 	}
 
-	err := fd.stor.InsertDataSource(&ds)
+	err := fd.s.InsertDataSource(&ds)
 	if err != nil {
 		return err
 	}
