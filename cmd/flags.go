@@ -25,7 +25,7 @@ func debugFlag(cmd *cobra.Command) {
 func rootDirFlag(cmd *cobra.Command) {
 	root, _ := cmd.Flags().GetString("root-dir")
 	if root != "" {
-		opts = append(opts, config.OptRootPath(root))
+		opts = append(opts, config.OptCacheDir(root))
 	}
 }
 
@@ -41,11 +41,6 @@ func jobsNumFlag(cmd *cobra.Command) {
 	if jobs > 0 {
 		opts = append(opts, config.OptJobsNum(jobs))
 	}
-}
-
-func inMemoryFlag(cmd *cobra.Command) {
-	b, _ := cmd.Flags().GetBool("in-memory")
-	opts = append(opts, config.OptInMemory(b))
 }
 
 func versionFlag(cmd *cobra.Command) {

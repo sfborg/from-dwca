@@ -90,11 +90,11 @@ func (f *fdwca) OutSFGA(path string) error {
 	}
 
 	ext := filepath.Ext(path)
-	if f.cfg.WithSqlOutput && ext != ".sql" {
+	if !f.cfg.WithBinOutput && ext != ".sql" {
 		path = path + ".sql"
 	}
 
-	if !f.cfg.WithSqlOutput && ext != ".sqlite" {
+	if f.cfg.WithBinOutput && ext != ".sqlite" {
 		path = path + ".sqlite"
 	}
 
@@ -104,4 +104,8 @@ func (f *fdwca) OutSFGA(path string) error {
 	}
 
 	return nil
+}
+
+func (fd *fdwca) checkSFGA() bool {
+	return fd.stor.Exists()
 }

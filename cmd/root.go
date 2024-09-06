@@ -31,7 +31,7 @@ import (
 	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
-	"github.com/sfborg/sflib/io/sfgaio"
+	"github.com/sfborg/sflib/io/schemaio"
 	"github.com/spf13/cobra"
 )
 
@@ -49,7 +49,7 @@ based on a version of sgma schema.`,
 		versionFlag(cmd)
 		flags := []flagFunc{
 			debugFlag, rootDirFlag,
-			jobsNumFlag, inMemoryFlag, sqlFlag,
+			jobsNumFlag, sqlFlag,
 		}
 		for _, v := range flags {
 			v(cmd)
@@ -76,9 +76,9 @@ based on a version of sgma schema.`,
 			os.Exit(1)
 		}
 
-		sfga := sfgaio.New(cfg.GitRepo, cfg.TempRepoPath)
+		sfgaSchema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
 
-		stor := storio.New(cfg, sfga)
+		stor := storio.New(cfg, sfgaSchema)
 		err = stor.Init()
 		if err != nil {
 			slog.Error("Cannot initialize storage", "error", err)
@@ -135,6 +135,5 @@ func init() {
 	rootCmd.Flags().StringP("root-dir", "r", "", "root directory for temporary files")
 	rootCmd.Flags().IntP("jobs-number", "j", 0, "number of concurrent jobs")
 	rootCmd.Flags().BoolP("sql-output", "s", false, "return sql, text-only dump")
-	rootCmd.Flags().BoolP("in-memory", "m", false, "set sqlite database in memory")
 	rootCmd.Flags().BoolP("version", "V", false, "shows app's version")
 }
