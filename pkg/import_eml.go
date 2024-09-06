@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/gnames/dwca/pkg/ent/eml"
-	"github.com/sfborg/from-dwca/internal/ent/ds"
+	"github.com/sfborg/from-dwca/internal/ent/schema"
 )
 
 func (fd *fdwca) importEML(data *eml.EML, recNum int) error {
@@ -13,7 +13,7 @@ func (fd *fdwca) importEML(data *eml.EML, recNum int) error {
 		doi = data.Dataset.ID
 	}
 
-	ds := ds.DataSource{
+	ds := schema.DataSource{
 		ID:          data.Dataset.ID,
 		Title:       data.Dataset.Title,
 		DOI:         doi,
@@ -21,7 +21,7 @@ func (fd *fdwca) importEML(data *eml.EML, recNum int) error {
 		RecordCount: recNum,
 	}
 
-	err := fd.stor.InsertDataSource(&ds)
+	err := fd.s.InsertDataSource(&ds)
 	if err != nil {
 		return err
 	}

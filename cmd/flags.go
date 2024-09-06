@@ -22,17 +22,24 @@ func debugFlag(cmd *cobra.Command) {
 	}
 }
 
-func rootDirFlag(cmd *cobra.Command) {
+func cacheDirFlag(cmd *cobra.Command) {
 	root, _ := cmd.Flags().GetString("root-dir")
 	if root != "" {
-		opts = append(opts, config.OptRootPath(root))
+		opts = append(opts, config.OptCacheDir(root))
 	}
 }
 
-func sqlFlag(cmd *cobra.Command) {
-	b, _ := cmd.Flags().GetBool("sql-output")
+func binFlag(cmd *cobra.Command) {
+	b, _ := cmd.Flags().GetBool("binary-output")
 	if b {
-		opts = append(opts, config.OptWithSqlOutput(b))
+		opts = append(opts, config.OptWithBinOutput(b))
+	}
+}
+
+func zipFlag(cmd *cobra.Command) {
+	b, _ := cmd.Flags().GetBool("zip-output")
+	if b {
+		opts = append(opts, config.OptWithZipOutput(b))
 	}
 }
 
@@ -41,11 +48,6 @@ func jobsNumFlag(cmd *cobra.Command) {
 	if jobs > 0 {
 		opts = append(opts, config.OptJobsNum(jobs))
 	}
-}
-
-func inMemoryFlag(cmd *cobra.Command) {
-	b, _ := cmd.Flags().GetBool("in-memory")
-	opts = append(opts, config.OptInMemory(b))
 }
 
 func versionFlag(cmd *cobra.Command) {

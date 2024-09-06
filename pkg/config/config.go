@@ -28,17 +28,17 @@ type Config struct {
 	// GitRepo contains data for sfga schema Git repository.
 	sfga.GitRepo
 
-	// TempRepoPath is a temporary location to schema files downloaded from GitHub.
-	TempRepoPath string
+	// TempRepoDir is a temporary location to schema files downloaded from GitHub.
+	TempRepoDir string
 
-	// RootPath is the root path for all temporary files.
-	RootPath string
+	// CacheDir is the root path for all cached files.
+	CacheDir string
 
-	// DBPath is the path SFGA database.
-	DBPath string
+	// CacheSfgaDir is the path SFGA database.
+	CacheSfgaDir string
 
-	// DumpPath is the path to store the resulting sqlite file with data.
-	DumpPath string
+	// // CacheSfgaDir is the path to store the resulting sqlite file with data.
+	// CacheSfgaDir string
 
 	// JobsNum is the number of concurrent jobs to run.
 	JobsNum int
@@ -46,36 +46,30 @@ type Config struct {
 	// BatchSize is the number of records to insert in one transaction.
 	BatchSize int
 
-	// InMemory is a flag to use in-memory sqlite database.
-	InMemory bool
+	// WithBinOutput is a flag to output binary SQLite database instead of
+	// SQL dump.
+	WithBinOutput bool
 
-	// WithSqlOutput is a flag to output SQL dump instead of SQLite binary.
-	WithSqlOutput bool
+	// WithZipOutput is a flag to return zipped SFGAarchive outpu.
+	WithZipOutput bool
 }
 
 // Option is a function type that allows to standardize how options to
 // the configuration are organized.
 type Option func(*Config)
 
-// OptRootPath sets the root path for all temporary files.
-func OptRootPath(s string) Option {
+// OptCacheDir sets the root path for all temporary files.
+func OptCacheDir(s string) Option {
 	return func(c *Config) {
-		c.RootPath = s
+		c.CacheDir = s
 	}
 }
 
-// OptSchemaPath sets the path to store the sqlite schema file.
-func OptSchemaPath(s string) Option {
-	return func(c *Config) {
-		c.DBPath = s
-	}
-}
-
-// OptDumpPath sets the path to store resulting sqlite file with data imported
+// OptCacheSfgaDir sets the path to store resulting sqlite file with data imported
 // from DwCA file.
-func OptDumpPath(s string) Option {
+func OptCacheSfgaDir(s string) Option {
 	return func(c *Config) {
-		c.DumpPath = s
+		c.CacheSfgaDir = s
 	}
 }
 
@@ -93,17 +87,17 @@ func OptJobsNum(n int) Option {
 	}
 }
 
-// OptWithSqlOutput sets output as text-only SQL file.
-func OptWithSqlOutput(b bool) Option {
+// OptWithBinOutput sets output as binary SQLite file.
+func OptWithBinOutput(b bool) Option {
 	return func(c *Config) {
-		c.WithSqlOutput = b
+		c.WithBinOutput = b
 	}
 }
 
-// OptInMemory sets the flag to use in-memory sqlite database.
-func OptInMemory(b bool) Option {
+// OptWithZipOutput sets output as binary SQLite file.
+func OptWithZipOutput(b bool) Option {
 	return func(c *Config) {
-		c.InMemory = b
+		c.WithZipOutput = b
 	}
 }
 
@@ -117,7 +111,7 @@ func New(opts ...Option) Config {
 	}
 	path = filepath.Join(path, "sfborg")
 
-	schemaRepo := filepath.Join(tmpDir, "sfborg_sfda")
+	schemaRepo := filepath.Join(tmpDir, "sfborg", "sfga")
 
 	res := Config{
 		GitRepo: sfga.GitRepo{
@@ -125,17 +119,16 @@ func New(opts ...Option) Config {
 			Tag:          repoTag,
 			ShaSchemaSQL: schemaHash,
 		},
-		TempRepoPath: schemaRepo,
-		RootPath:     path,
-		JobsNum:      jobsNum,
-		BatchSize:    50_000,
+		TempRepoDir: schemaRepo,
+		CacheDir:    path,
+		JobsNum:     jobsNum,
+		BatchSize:   50_000,
 	}
 
 	for _, opt := range opts {
 		opt(&res)
 	}
 
-	res.DBPath = filepath.Join(res.RootPath, "from", "dwca", "db")
-	res.DumpPath = filepath.Join(res.RootPath, "from", "dwca", "dump")
+	res.CacheSfgaDir = filepath.Join(res.CacheDir, "from", "dwca", "sfga")
 	return res
 }

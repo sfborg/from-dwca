@@ -9,7 +9,7 @@ import (
 	"github.com/gnames/dwca/pkg/ent/meta"
 	"github.com/gnames/gnlib"
 	"github.com/gnames/gnuuid"
-	"github.com/sfborg/from-dwca/internal/ent/vern"
+	"github.com/sfborg/from-dwca/internal/ent/schema"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -31,7 +31,7 @@ func (f *fdwca) importExtensions(arc dwca.Archive) error {
 
 func (fd *fdwca) importVernacular(idx int, ext *meta.Extension) error {
 	chIn := make(chan []string)
-	chOut := make(chan []*vern.Data)
+	chOut := make(chan []*schema.Vern)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -47,7 +47,7 @@ func (fd *fdwca) importVernacular(idx int, ext *meta.Extension) error {
 		return fd.writeVernData(ctx, chOut)
 	})
 
-	_, err := fd.arc.ExtensionStream(ctx, idx, chIn)
+	_, err := fd.d.ExtensionStream(ctx, idx, chIn)
 	if err != nil {
 		return err
 	}
@@ -62,12 +62,12 @@ func (fd *fdwca) vernWorker(
 	ctx context.Context,
 	ext *meta.Extension,
 	chIn <-chan []string,
-	chOut chan<- []*vern.Data,
+	chOut chan<- []*schema.Vern,
 ) error {
 	fieldsMap := fieldsMap(ext.Fields)
 	coreID := ext.CoreID.Idx
 
-	batch := make([]*vern.Data, 0, fd.cfg.BatchSize)
+	batch := make([]*schema.Vern, 0, fd.cfg.BatchSize)
 	for v := range chIn {
 		vrn := fd.processVernRow(v, coreID, fieldsMap)
 		if vrn == nil {
@@ -75,7 +75,7 @@ func (fd *fdwca) vernWorker(
 		}
 		if len(batch) == fd.cfg.BatchSize {
 			chOut <- batch
-			batch = make([]*vern.Data, 0, fd.cfg.BatchSize)
+			batch = make([]*schema.Vern, 0, fd.cfg.BatchSize)
 		}
 		batch = append(batch, vrn)
 
@@ -93,8 +93,8 @@ func (fd *fdwca) processVernRow(
 	row []string,
 	coreID int,
 	fieldsMap map[string]int,
-) *vern.Data {
-	var res vern.Data
+) *schema.Vern {
+	var res schema.Vern
 	res.TaxonID = row[coreID]
 
 	res.VernacularName = fieldVal(row, fieldsMap, "vernacularname")
@@ -113,12 +113,12 @@ func (fd *fdwca) processVernRow(
 
 func (fd *fdwca) writeVernData(
 	ctx context.Context,
-	chOut <-chan []*vern.Data,
+	chOut <-chan []*schema.Vern,
 ) error {
 	var err error
 	for cd := range chOut {
 		// write to db
-		err = fd.stor.InsertVernData(cd)
+		err = fd.s.InsertVern(cd)
 		if err != nil {
 			for range chOut {
 			}

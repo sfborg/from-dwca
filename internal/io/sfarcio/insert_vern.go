@@ -1,12 +1,12 @@
-package storio
+package sfarcio
 
 import (
 	"log/slog"
 
-	"github.com/sfborg/from-dwca/internal/ent/vern"
+	"github.com/sfborg/from-dwca/internal/ent/schema"
 )
 
-func (s *storio) InsertVernData(data []*vern.Data) error {
+func (s *sfarcio) InsertVern(data []*schema.Vern) error {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return err

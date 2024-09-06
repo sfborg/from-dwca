@@ -1,24 +1,21 @@
 package fdwca
 
 import (
-	"errors"
-	"path/filepath"
-
 	dwca "github.com/gnames/dwca/pkg"
 	dwcacfg "github.com/gnames/dwca/pkg/config"
 	"github.com/gnames/gnparser"
-	"github.com/sfborg/from-dwca/internal/ent/stor"
+	"github.com/sfborg/from-dwca/internal/ent/sfarc"
 	"github.com/sfborg/from-dwca/pkg/config"
 )
 
 type fdwca struct {
 	cfg     config.Config
-	stor    stor.Storage
-	arc     dwca.Archive
+	s       sfarc.Archive
+	d       dwca.Archive
 	gnpPool chan gnparser.GNparser
 }
 
-func New(cfg config.Config, stor stor.Storage) FromDwCA {
+func New(cfg config.Config, sfarc sfarc.Archive) FromDwCA {
 	res := &fdwca{cfg: cfg}
 
 	poolSize := cfg.JobsNum
@@ -28,7 +25,7 @@ func New(cfg config.Config, stor stor.Storage) FromDwCA {
 		gnpPool <- gnparser.New(cfgGNP)
 	}
 	res.gnpPool = gnpPool
-	res.stor = stor
+	res.s = sfarc
 
 	return res
 }
@@ -64,7 +61,7 @@ func (fd *fdwca) GetDwCA(fileDwCA string) (dwca.Archive, error) {
 }
 
 func (fd *fdwca) ImportDwCA(arc dwca.Archive) error {
-	fd.arc = arc
+	fd.d = arc
 	num, err := fd.importCore()
 	if err != nil {
 		return err
@@ -83,25 +80,15 @@ func (fd *fdwca) ImportDwCA(arc dwca.Archive) error {
 	return nil
 }
 
-func (f *fdwca) OutSFGA(path string) error {
-	var err error
-	if !f.checkSFGA() {
-		return errors.New("SFGA not found")
-	}
-
-	ext := filepath.Ext(path)
-	if f.cfg.WithSqlOutput && ext != ".sql" {
-		path = path + ".sql"
-	}
-
-	if !f.cfg.WithSqlOutput && ext != ".sqlite" {
-		path = path + ".sqlite"
-	}
-
-	err = f.stor.DumpSFGA(path)
+func (f *fdwca) ExportSFGA(outputPath string) error {
+	err := f.s.Export(outputPath)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (fd *fdwca) checkSFGA() bool {
+	return fd.s.Exists()
 }

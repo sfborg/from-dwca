@@ -11,13 +11,13 @@ import (
 	"github.com/gnames/gnparser"
 	"github.com/gnames/gnparser/ent/parsed"
 	"github.com/gnames/gnuuid"
-	"github.com/sfborg/from-dwca/internal/ent/core"
+	"github.com/sfborg/from-dwca/internal/ent/schema"
 	"golang.org/x/sync/errgroup"
 )
 
 func (fd *fdwca) importCore() (int, error) {
 	chIn := make(chan []string)
-	chOut := make(chan []*core.Data)
+	chOut := make(chan []*schema.Core)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -43,7 +43,7 @@ func (fd *fdwca) importCore() (int, error) {
 		close(chOut)
 	}()
 
-	num, err := fd.arc.CoreStream(ctx, chIn)
+	num, err := fd.d.CoreStream(ctx, chIn)
 	if err != nil {
 		return 0, err
 	}
@@ -56,12 +56,12 @@ func (fd *fdwca) importCore() (int, error) {
 
 func (f *fdwca) writeCoreData(
 	ctx context.Context,
-	chOut chan []*core.Data,
+	chOut chan []*schema.Core,
 ) error {
 	var err error
 	for cd := range chOut {
 		// write to db
-		err = f.stor.InsertCoreData(cd)
+		err = f.s.InsertCore(cd)
 		if err != nil {
 			for range chOut {
 			}
@@ -90,22 +90,22 @@ func fieldsMap(fields []meta.Field) map[string]int {
 func (fd *fdwca) coreParserWorker(
 	ctx context.Context,
 	chIn chan []string,
-	chOut chan []*core.Data,
+	chOut chan []*schema.Core,
 ) error {
 	p := <-fd.gnpPool
 	defer func() {
 		fd.gnpPool <- p
 	}()
 
-	fieldsMap := fieldsMap(fd.arc.Meta().Core.Fields)
-	coreID := fd.arc.Meta().Core.ID.Idx
+	fieldsMap := fieldsMap(fd.d.Meta().Core.Fields)
+	coreID := fd.d.Meta().Core.ID.Idx
 
-	batch := make([]*core.Data, 0, fd.cfg.BatchSize)
+	batch := make([]*schema.Core, 0, fd.cfg.BatchSize)
 	for v := range chIn {
 		row := fd.processCoreRow(v, p, coreID, fieldsMap)
 		if len(batch) == fd.cfg.BatchSize {
 			chOut <- batch
-			batch = make([]*core.Data, 0, fd.cfg.BatchSize)
+			batch = make([]*schema.Core, 0, fd.cfg.BatchSize)
 		}
 		batch = append(batch, row)
 
@@ -134,8 +134,8 @@ func (fd *fdwca) processCoreRow(
 	p gnparser.GNparser,
 	idIdx int,
 	fieldsMap map[string]int,
-) *core.Data {
-	res := core.Data{RecordID: row[idIdx]}
+) *schema.Core {
+	res := schema.Core{RecordID: row[idIdx]}
 	name := fieldVal(row, fieldsMap, "scientificnamestring")
 	parsed := p.ParseName(name)
 	addParsedData(&res, parsed)
@@ -150,7 +150,7 @@ func (fd *fdwca) processCoreRow(
 	return &res
 }
 
-func addParsedData(cd *core.Data, parsed parsed.Parsed) {
+func addParsedData(cd *schema.Core, parsed parsed.Parsed) {
 	cd.NameID = parsed.VerbatimID
 	cd.Name = parsed.Verbatim
 	if !parsed.Parsed {

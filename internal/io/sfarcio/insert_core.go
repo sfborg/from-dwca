@@ -1,24 +1,18 @@
-package storio
+package sfarcio
 
 import (
 	"database/sql"
 	"fmt"
 	"log/slog"
 
-	"github.com/sfborg/from-dwca/internal/ent/core"
+	"github.com/sfborg/from-dwca/internal/ent/schema"
 )
 
-func (s *storio) InsertCoreData(data []*core.Data) error {
+func (s *sfarcio) InsertCore(data []*schema.Core) error {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return err
 	}
-	// 	if _, err = tx.Exec("PRAGMA synchronous = OFF"); err != nil {
-	// 		return err
-	// 	}
-	// 	if _, err = tx.Exec("PRAGMA journal_mode = OFF"); err != nil {
-	// 		return err
-	// 	}
 
 	stmt, err := tx.Prepare(`
 	INSERT OR IGNORE INTO core

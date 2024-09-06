@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Add [#11]: migrate SQLite functionality to sflib.
+
 ## [v0.0.3] - 2024-08-21 Wed
 
 Add [#10]: sfga is now in sflib.

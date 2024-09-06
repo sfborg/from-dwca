@@ -21,7 +21,7 @@ func (s *sysio) Init() error {
 	if err != nil {
 		return err
 	}
-	gnsys.MakeDir(s.cfg.DBPath)
+	gnsys.MakeDir(s.cfg.CacheSfgaDir)
 	return nil
 }
 
@@ -30,5 +30,5 @@ func (s *sysio) Close() error {
 }
 
 func (s *sysio) cleanup() error {
-	return os.RemoveAll(s.cfg.RootPath)
+	return os.RemoveAll(s.cfg.CacheDir)
 }

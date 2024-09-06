@@ -1,12 +1,12 @@
-package storio
+package sfarcio
 
 import (
 	"log/slog"
 
-	"github.com/sfborg/from-dwca/internal/ent/ds"
+	"github.com/sfborg/from-dwca/internal/ent/schema"
 )
 
-func (s *storio) InsertDataSource(data *ds.DataSource) error {
+func (s *sfarcio) InsertDataSource(data *schema.DataSource) error {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return err
@@ -27,7 +27,7 @@ func (s *storio) InsertDataSource(data *ds.DataSource) error {
 	defer stmt.Close()
 
 	_, err = stmt.Exec(
-		data.ID, data.GNID, data.Title, data.TitleShort, data.Version,
+		data.ID, data.GnID, data.Title, data.TitleShort, data.Version,
 		data.RevisionDate, data.DOI, data.Citation, data.Authors,
 		data.Description, data.WebsiteURL, data.DataURL,
 		data.RecordCount, data.UpdatedAt,

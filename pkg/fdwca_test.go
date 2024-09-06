@@ -6,11 +6,12 @@ import (
 	"testing"
 
 	"github.com/gnames/gnsys"
-	"github.com/sfborg/from-dwca/internal/io/storio"
+	"github.com/sfborg/from-dwca/internal/io/sfarcio"
 	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
-	"github.com/sfborg/sflib/io/sfgaio"
+	"github.com/sfborg/sflib/io/dbio"
+	"github.com/sfborg/sflib/io/schemaio"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -33,13 +34,14 @@ func TestImportDwCA(t *testing.T) {
 	err = sysio.New(cfg).Init()
 	assert.Nil(err)
 
-	sfga := sfgaio.New(cfg.GitRepo, cfg.TempRepoPath)
+	schema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
+	db := dbio.New(cfg.CacheSfgaDir)
 
-	stor := storio.New(cfg, sfga)
-	err = stor.Init()
+	sfarc := sfarcio.New(cfg, schema, db)
+	err = sfarc.Connect()
 	assert.Nil(err)
 
-	fd := fdwca.New(cfg, stor)
+	fd := fdwca.New(cfg, sfarc)
 	arc, err := fd.GetDwCA(path)
 	assert.Nil(err)
 	assert.NotNil(arc.Meta())
@@ -58,15 +60,16 @@ func TestOutSFGA(t *testing.T) {
 	err = sysio.New(cfg).Init()
 	assert.Nil(err)
 
-	sfga := sfgaio.New(cfg.GitRepo, cfg.TempRepoPath)
+	schema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
+	sfdb := dbio.New(cfg.CacheSfgaDir)
 
-	stor := storio.New(cfg, sfga)
-	err = stor.Init()
+	sfarc := sfarcio.New(cfg, schema, sfdb)
+	err = sfarc.Connect()
 	assert.Nil(err)
 
-	fd := fdwca.New(cfg, stor)
+	fd := fdwca.New(cfg, sfarc)
 
-	err = fd.OutSFGA("test")
+	err = fd.ExportSFGA("test")
 	assert.NotNil(err)
 
 	arc, err := fd.GetDwCA(path)
@@ -75,15 +78,15 @@ func TestOutSFGA(t *testing.T) {
 	err = fd.ImportDwCA(arc)
 	assert.Nil(err)
 
-	outPath := filepath.Join(os.TempDir(), "sfga.zip")
+	outPath := filepath.Join(os.TempDir(), "sfga")
 	exists, err = gnsys.FileExists(outPath)
 	assert.Nil(err)
 	assert.False(exists)
 
-	err = fd.OutSFGA(outPath)
+	err = fd.ExportSFGA(outPath)
 	assert.Nil(err)
 
-	exists, err = gnsys.FileExists(outPath + ".sqlite")
+	exists, err = gnsys.FileExists(outPath + ".sql")
 	assert.Nil(err)
 	assert.True(exists)
 	os.Remove(outPath)
