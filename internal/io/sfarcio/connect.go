@@ -30,7 +30,7 @@ func (s *sfarcio) setSchema() error {
 		return err
 	}
 
-	schFile := filepath.Join(s.cfg.CacheDbDir, "schema.sql")
+	schFile := filepath.Join(s.cfg.CacheSfgaDir, "schema.sql")
 	err = os.WriteFile(schFile, schema, 0644)
 	if err != nil {
 		slog.Error("Cannot write schema file", "error", err)

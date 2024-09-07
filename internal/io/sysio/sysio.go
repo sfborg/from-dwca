@@ -21,7 +21,7 @@ func (s *sysio) Init() error {
 	if err != nil {
 		return err
 	}
-	gnsys.MakeDir(s.cfg.CacheDbDir)
+	gnsys.MakeDir(s.cfg.CacheSfgaDir)
 	return nil
 }
 

@@ -34,11 +34,11 @@ type Config struct {
 	// CacheDir is the root path for all cached files.
 	CacheDir string
 
-	// CacheDbDir is the path SFGA database.
-	CacheDbDir string
-
-	// CacheSfgaDir is the path to store the resulting sqlite file with data.
+	// CacheSfgaDir is the path SFGA database.
 	CacheSfgaDir string
+
+	// // CacheSfgaDir is the path to store the resulting sqlite file with data.
+	// CacheSfgaDir string
 
 	// JobsNum is the number of concurrent jobs to run.
 	JobsNum int

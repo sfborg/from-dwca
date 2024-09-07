@@ -35,7 +35,7 @@ func TestImportDwCA(t *testing.T) {
 	assert.Nil(err)
 
 	schema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
-	db := dbio.New(cfg.CacheDbDir)
+	db := dbio.New(cfg.CacheSfgaDir)
 
 	sfarc := sfarcio.New(cfg, schema, db)
 	err = sfarc.Connect()
@@ -61,7 +61,7 @@ func TestOutSFGA(t *testing.T) {
 	assert.Nil(err)
 
 	schema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
-	sfdb := dbio.New(cfg.CacheDbDir)
+	sfdb := dbio.New(cfg.CacheSfgaDir)
 
 	sfarc := sfarcio.New(cfg, schema, sfdb)
 	err = sfarc.Connect()

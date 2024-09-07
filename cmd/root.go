@@ -77,7 +77,7 @@ based on a version of sgma schema.`,
 		}
 
 		sfgaSchema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
-		sfgaDB := dbio.New(cfg.CacheDbDir)
+		sfgaDB := dbio.New(cfg.CacheSfgaDir)
 
 		stor := sfarcio.New(cfg, sfgaSchema, sfgaDB)
 		err = stor.Connect()
