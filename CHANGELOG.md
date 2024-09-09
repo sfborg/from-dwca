@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.4] - 2024-09-09 Mon
+
+Add: reset SFGA versions to v0.x.x (current v0.2.6) to allow backwards
+     incompatibility according to Semantic Versioning approach.
 Add [#11]: migrate SQLite functionality to sflib.
 
 ## [v0.0.3] - 2024-08-21 Wed
@@ -35,6 +39,8 @@ Add: initial commit
 
 This document follows [changelog guidelines]
 
+[v0.0.4]: https://github.com/sfborg/from-dwca/compare/v0.0.3...v0.0.4
+[v0.0.3]: https://github.com/sfborg/from-dwca/compare/v0.0.2...v0.0.3
 [v0.0.2]: https://github.com/sfborg/from-dwca/compare/v0.0.1...v0.0.2
 [v0.0.1]: https://github.com/sfborg/from-dwca/compare/v0.0.0...v0.0.1
 [v0.0.0]: https://github.com/sfborg/from-dwca/tree/v0.0.0
