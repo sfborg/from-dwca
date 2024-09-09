@@ -16,8 +16,9 @@ func (s *sfarcio) InsertCore(data []*schema.Core) error {
 
 	stmt, err := tx.Prepare(`
 	INSERT OR IGNORE INTO core
-			(dwc_taxon_id, dwc_scientific_name_id, dwc_scientific_name,
-		   dwc_scientific_name_authorship, dwc_name_published_in_year,
+			(dwc_taxon_id, local_id, global_id, dwc_scientific_name_id,
+		   dwc_scientific_name, dwc_scientific_name_authorship,
+		   dwc_name_published_in_year,
 
 		   cardinality, canonical_id, canonical,  canonical_full_id,
 		   canonical_full,
@@ -30,7 +31,7 @@ func (s *sfarcio) InsertCore(data []*schema.Core) error {
 		   
 		   dwc_nomenclatural_code, parse_quality)
 		VALUES
-			(?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,  ?, ?)`,
+			(?, ?, ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,  ?, ?)`,
 	)
 	if err != nil {
 		return err
@@ -39,7 +40,8 @@ func (s *sfarcio) InsertCore(data []*schema.Core) error {
 
 	for _, v := range data {
 		_, err = stmt.Exec(
-			v.RecordID, v.NameID, v.Name, v.Authorship, v.Year,
+			v.RecordID, v.LocalID, v.GlobalID, v.NameID, v.Name, v.Authorship,
+			v.Year,
 
 			v.Cardinality, v.CanonicalID, v.Canonical, v.CanonicalFullID,
 			v.CanonicalFull,

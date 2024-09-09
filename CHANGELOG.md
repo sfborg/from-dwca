@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Add: localID and globalID
+
 ## [v0.0.4] - 2024-09-09 Mon
 
 Add: reset SFGA versions to v0.x.x (current v0.2.6) to allow backwards

@@ -6,8 +6,6 @@ package schema
 type DataSource struct {
 	ID           string
 	GnID         int
-	LocalID      string
-	GlobalID     string
 	Title        string
 	TitleShort   string
 	Version      string
@@ -25,6 +23,8 @@ type DataSource struct {
 // Core contains the bulk of a record data.
 type Core struct {
 	RecordID   string
+	LocalID    string
+	GlobalID   string
 	NameID     string
 	Name       string
 	Authorship string

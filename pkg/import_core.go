@@ -140,6 +140,8 @@ func (fd *fdwca) processCoreRow(
 	parsed := p.ParseName(name)
 	addParsedData(&res, parsed)
 	res.RecordID = row[idIdx]
+	res.LocalID = fieldVal(row, fieldsMap, "localid")
+	res.GlobalID = fieldVal(row, fieldsMap, "globalid")
 	res.Classification = fieldVal(row, fieldsMap, "breadcrumbnames")
 	res.ClassificationIDs = fieldVal(row, fieldsMap, "breadcrumbids")
 	res.ClassificationRanks = fieldVal(row, fieldsMap, "breadcrumbranks")
