@@ -5,12 +5,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Add: option to process, skip or break on rows with wrong number of fields
 Add: localID and globalID
 
 ## [v0.0.4] - 2024-09-09 Mon
 
 Add: reset SFGA versions to v0.x.x (current v0.2.6) to allow backwards
-     incompatibility according to Semantic Versioning approach.
+incompatibility according to Semantic Versioning approach.
 Add [#11]: migrate SQLite functionality to sflib.
 
 ## [v0.0.3] - 2024-08-21 Wed
