@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/gnames/gnfmt"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
 	"github.com/spf13/cobra"
@@ -60,5 +61,23 @@ func versionFlag(cmd *cobra.Command) {
 			version.Build,
 		)
 		os.Exit(0)
+	}
+}
+
+func fieldsNumFlag(cmd *cobra.Command) {
+	s, _ := cmd.Flags().GetString("wrong-fields-num")
+	switch s {
+	case "":
+		return
+	case "stop":
+		opts = append(opts, config.OptWrongFieldsNum(gnfmt.ErrorBadRow))
+	case "ignore":
+		opts = append(opts, config.OptWrongFieldsNum(gnfmt.SkipBadRow))
+	case "process":
+		opts = append(opts, config.OptWrongFieldsNum(gnfmt.ProcessBadRow))
+	default:
+		slog.Warn("Unknown setting for wrong-fields-num, keeping default",
+			"setting", s)
+		slog.Info("Supported values are: 'stop' (default), 'ignore', 'process'")
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/gnames/gnfmt"
 	"github.com/sfborg/sflib/ent/sfga"
 )
 
@@ -45,6 +46,10 @@ type Config struct {
 
 	// BatchSize is the number of records to insert in one transaction.
 	BatchSize int
+
+	// WrongFieldsNum dets decision what to do if a row has more/less fields
+	// than it should.
+	WrongFieldsNum gnfmt.BadRow
 
 	// WithBinOutput is a flag to output binary SQLite database instead of
 	// SQL dump.
@@ -87,6 +92,12 @@ func OptJobsNum(n int) Option {
 	}
 }
 
+func OptWrongFieldsNum(br gnfmt.BadRow) Option {
+	return func(c *Config) {
+		c.WrongFieldsNum = br
+	}
+}
+
 // OptWithBinOutput sets output as binary SQLite file.
 func OptWithBinOutput(b bool) Option {
 	return func(c *Config) {
@@ -119,10 +130,11 @@ func New(opts ...Option) Config {
 			Tag:          repoTag,
 			ShaSchemaSQL: schemaHash,
 		},
-		TempRepoDir: schemaRepo,
-		CacheDir:    path,
-		JobsNum:     jobsNum,
-		BatchSize:   50_000,
+		TempRepoDir:    schemaRepo,
+		CacheDir:       path,
+		JobsNum:        jobsNum,
+		BatchSize:      50_000,
+		WrongFieldsNum: gnfmt.ErrorBadRow,
 	}
 
 	for _, opt := range opts {

@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/gnames/gnfmt"
 	"github.com/gnames/gnsys"
 	"github.com/sfborg/from-dwca/internal/io/sfarcio"
 	"github.com/sfborg/from-dwca/internal/io/sysio"
@@ -18,7 +19,7 @@ import (
 func TestGetDwca(t *testing.T) {
 	assert := assert.New(t)
 	path := filepath.Join("testdata", "dwca", "gymnodiniales.tar.gz")
-	cfg := config.New()
+	cfg := config.New(config.OptWrongFieldsNum(gnfmt.SkipBadRow))
 	fd := fdwca.New(cfg, nil)
 	arc, err := fd.GetDwCA(path)
 	assert.Nil(err)
@@ -55,7 +56,7 @@ func TestOutSFGA(t *testing.T) {
 	var exists bool
 
 	path := filepath.Join("testdata", "dwca", "gymnodiniales.tar.gz")
-	cfg := config.New()
+	cfg := config.New(config.OptWrongFieldsNum(gnfmt.SkipBadRow))
 
 	err = sysio.New(cfg).Init()
 	assert.Nil(err)

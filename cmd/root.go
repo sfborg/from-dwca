@@ -49,7 +49,7 @@ based on a version of sgma schema.`,
 		var err error
 		versionFlag(cmd)
 		flags := []flagFunc{
-			debugFlag, cacheDirFlag, jobsNumFlag, binFlag, zipFlag,
+			debugFlag, cacheDirFlag, jobsNumFlag, binFlag, zipFlag, fieldsNumFlag,
 		}
 		for _, v := range flags {
 			v(cmd)
@@ -79,14 +79,14 @@ based on a version of sgma schema.`,
 		sfgaSchema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
 		sfgaDB := dbio.New(cfg.CacheSfgaDir)
 
-		stor := sfarcio.New(cfg, sfgaSchema, sfgaDB)
-		err = stor.Connect()
+		sfarc := sfarcio.New(cfg, sfgaSchema, sfgaDB)
+		err = sfarc.Connect()
 		if err != nil {
 			slog.Error("Cannot initialize storage", "error", err)
 			os.Exit(1)
 		}
 
-		fd := fdwca.New(cfg, stor)
+		fd := fdwca.New(cfg, sfarc)
 		var arc dwca.Archive
 
 		slog.Info("Importing DwCA data", "file", dwcaPath)
@@ -126,6 +126,10 @@ func Execute() {
 func init() {
 	rootCmd.Flags().BoolP("debug", "d", false, "set debug mode")
 	rootCmd.Flags().StringP("root-dir", "r", "", "root directory for temporary files")
+	rootCmd.Flags().StringP("wrong-fields-num", "w", "",
+		`how to process rows with wrong fields number
+     choices: 'stop', 'skip', 'process'
+     default: 'stop'`)
 	rootCmd.Flags().IntP("jobs-number", "j", 0, "number of concurrent jobs")
 	rootCmd.Flags().BoolP("binary-output", "b", false, "return binary SQLite database")
 	rootCmd.Flags().BoolP("zip-output", "z", false, "compress output with zip")
