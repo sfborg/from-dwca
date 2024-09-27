@@ -122,8 +122,8 @@ github.com/fsnotify/fsnotify v1.5.1/go.mod h1:T3375wBYaZdLLcVNkcVbzGHY7f1l/uK5T5
 github.com/fsnotify/fsnotify v1.7.0 h1:8JEhPFa5W2WU7YfeZzPNqzMP6Lwt7L2715Ggo0nosvA=
 github.com/fsnotify/fsnotify v1.7.0/go.mod h1:40Bi/Hjc2AVfZrqy+aj+yEI+/bRxZnMJyTJwOpGvigM=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
-github.com/gnames/dwca v0.3.1 h1:nQ3RXj5iWhw3odhOPs2p8X1hE9RopO8Nu63VCHNly/8=
-github.com/gnames/dwca v0.3.1/go.mod h1:80UiQSW8N4cY799jWxBCippdUMI+sFCW1YLDm44RCHE=
+github.com/gnames/dwca v0.3.2 h1:NC88IFcIWOUbHM1j6Zcjse/SFB6Z8sUTTou1BdXLTRU=
+github.com/gnames/dwca v0.3.2/go.mod h1:80UiQSW8N4cY799jWxBCippdUMI+sFCW1YLDm44RCHE=
 github.com/gnames/gnfmt v0.1.0/go.mod h1:WG9c3CoiVrGc1SDsxLk7zjmv2B4UIzI00m4K5Khc/d0=
 github.com/gnames/gnfmt v0.4.5 h1:wALSsnK0Eo1YH+u5sOeFosG5LKSfvl/mo5htfIGrBFY=
 github.com/gnames/gnfmt v0.4.5/go.mod h1:sga+oG6Qwfr0rqznMKpB72FdgcJPdP68WtrG7R4JrrI=
