@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Add: cardinality data.
 Add: option to process, skip or break on rows with wrong number of fields
 Add: localID and globalID
 

@@ -159,6 +159,7 @@ func addParsedData(cd *schema.Core, parsed parsed.Parsed) {
 		cd.Virus = parsed.Virus
 		return
 	}
+	cd.Cardinality = parsed.Cardinality
 	cd.Canonical = parsed.Canonical.Simple
 	cd.CanonicalID = gnuuid.New(parsed.Canonical.Simple).String()
 	cd.CanonicalFull = parsed.Canonical.Full

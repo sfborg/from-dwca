@@ -8,6 +8,7 @@ import (
 )
 
 func (s *sfarcio) Export(outPath string) error {
+	// check if core table has data
 	if !s.Exists() {
 		return errors.New("cannot find SFGA archive")
 	}
