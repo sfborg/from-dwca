@@ -5,11 +5,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/gnames/coldp/ent/coldp"
 	dwca "github.com/gnames/dwca/pkg"
 	"github.com/gnames/dwca/pkg/ent/meta"
 	"github.com/gnames/gnlib"
-	"github.com/gnames/gnuuid"
-	"github.com/sfborg/from-dwca/internal/ent/schema"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -31,7 +30,7 @@ func (f *fdwca) importExtensions(arc dwca.Archive) error {
 
 func (fd *fdwca) importVernacular(idx int, ext *meta.Extension) error {
 	chIn := make(chan []string)
-	chOut := make(chan []*schema.Vern)
+	chOut := make(chan []coldp.Vernacular)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -62,12 +61,12 @@ func (fd *fdwca) vernWorker(
 	ctx context.Context,
 	ext *meta.Extension,
 	chIn <-chan []string,
-	chOut chan<- []*schema.Vern,
+	chOut chan<- []coldp.Vernacular,
 ) error {
 	fieldsMap := fieldsMap(ext.Fields)
 	coreID := ext.CoreID.Idx
 
-	batch := make([]*schema.Vern, 0, fd.cfg.BatchSize)
+	batch := make([]coldp.Vernacular, 0, fd.cfg.BatchSize)
 	for v := range chIn {
 		vrn := fd.processVernRow(v, coreID, fieldsMap)
 		if vrn == nil {
@@ -75,9 +74,9 @@ func (fd *fdwca) vernWorker(
 		}
 		if len(batch) == fd.cfg.BatchSize {
 			chOut <- batch
-			batch = make([]*schema.Vern, 0, fd.cfg.BatchSize)
+			batch = make([]coldp.Vernacular, 0, fd.cfg.BatchSize)
 		}
-		batch = append(batch, vrn)
+		batch = append(batch, *vrn)
 
 		select {
 		case <-ctx.Done():
@@ -93,32 +92,34 @@ func (fd *fdwca) processVernRow(
 	row []string,
 	coreID int,
 	fieldsMap map[string]int,
-) *schema.Vern {
-	var res schema.Vern
+) *coldp.Vernacular {
+	var res coldp.Vernacular
 	res.TaxonID = row[coreID]
 
-	res.VernacularName = fieldVal(row, fieldsMap, "vernacularname")
-	if res.VernacularName == "" {
+	res.Name = fieldVal(row, fieldsMap, "vernacularname")
+	if res.Name == "" {
 		return nil
 	}
-	res.VernacularID = gnuuid.New(res.VernacularName).String()
 
-	res.Language = fieldVal(row, fieldsMap, "language")
-	res.LangCode = gnlib.LangCode(res.Language)
-	res.LangInEnglish = gnlib.LangName(res.LangCode)
-	res.Locality = fieldVal(row, fieldsMap, "locality")
-	res.CountryCode = fieldVal(row, fieldsMap, "countrycode")
+	lang := fieldVal(row, fieldsMap, "language")
+	if len(lang) > 3 {
+		res.Language = gnlib.LangCode(lang)
+	} else {
+		res.Language = lang
+	}
+	res.Area = fieldVal(row, fieldsMap, "locality")
+	res.Country = fieldVal(row, fieldsMap, "countrycode")
 	return &res
 }
 
 func (fd *fdwca) writeVernData(
 	ctx context.Context,
-	chOut <-chan []*schema.Vern,
+	chOut <-chan []coldp.Vernacular,
 ) error {
 	var err error
-	for cd := range chOut {
+	for d := range chOut {
 		// write to db
-		err = fd.s.InsertVern(cd)
+		err = fd.s.InsertVernaculars(d)
 		if err != nil {
 			for range chOut {
 			}

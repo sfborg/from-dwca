@@ -14,10 +14,10 @@ var (
 	repoURL = "https://github.com/sfborg/sfga"
 
 	// tag of the sfga repo to get correct schema version.
-	repoTag = "v0.2.6"
+	repoTag = "v0.3.15"
 
 	// schemaHash is the sha256 sum of the correponding schema version.
-	schemaHash = "e645e5ade52d"
+	schemaHash = "59fcbf07d83846"
 
 	// jobsNum is the default number of concurrent jobs to run.
 	jobsNum = 5
@@ -47,9 +47,9 @@ type Config struct {
 	// BatchSize is the number of records to insert in one transaction.
 	BatchSize int
 
-	// WrongFieldsNum dets decision what to do if a row has more/less fields
+	// BadRow dets decision what to do if a row has more/less fields
 	// than it should.
-	WrongFieldsNum gnfmt.BadRow
+	BadRow gnfmt.BadRow
 
 	// WithBinOutput is a flag to output binary SQLite database instead of
 	// SQL dump.
@@ -94,7 +94,7 @@ func OptJobsNum(n int) Option {
 
 func OptWrongFieldsNum(br gnfmt.BadRow) Option {
 	return func(c *Config) {
-		c.WrongFieldsNum = br
+		c.BadRow = br
 	}
 }
 
@@ -130,11 +130,11 @@ func New(opts ...Option) Config {
 			Tag:          repoTag,
 			ShaSchemaSQL: schemaHash,
 		},
-		TempRepoDir:    schemaRepo,
-		CacheDir:       path,
-		JobsNum:        jobsNum,
-		BatchSize:      50_000,
-		WrongFieldsNum: gnfmt.ErrorBadRow,
+		TempRepoDir: schemaRepo,
+		CacheDir:    path,
+		JobsNum:     jobsNum,
+		BatchSize:   50_000,
+		BadRow:      gnfmt.ErrorBadRow,
 	}
 
 	for _, opt := range opts {

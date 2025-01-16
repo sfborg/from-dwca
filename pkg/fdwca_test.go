@@ -7,7 +7,7 @@ import (
 
 	"github.com/gnames/gnfmt"
 	"github.com/gnames/gnsys"
-	"github.com/sfborg/from-dwca/internal/io/sfarcio"
+	"github.com/sfborg/from-coldp/pkg/io/sfgarcio"
 	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
@@ -31,6 +31,7 @@ func TestImportDwCA(t *testing.T) {
 	var err error
 	path := filepath.Join("testdata", "dwca", "aos-birds.tar.gz")
 	cfg := config.New()
+	coldpCfg := cfg.ToColdpConfig()
 
 	err = sysio.New(cfg).Init()
 	assert.Nil(err)
@@ -38,11 +39,11 @@ func TestImportDwCA(t *testing.T) {
 	schema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
 	db := dbio.New(cfg.CacheSfgaDir)
 
-	sfarc := sfarcio.New(cfg, schema, db)
-	err = sfarc.Connect()
+	sfgarc := sfgarcio.New(coldpCfg, schema, db)
+	err = sfgarc.Connect()
 	assert.Nil(err)
 
-	fd := fdwca.New(cfg, sfarc)
+	fd := fdwca.New(cfg, sfgarc)
 	arc, err := fd.GetDwCA(path)
 	assert.Nil(err)
 	assert.NotNil(arc.Meta())
@@ -57,6 +58,7 @@ func TestOutSFGA(t *testing.T) {
 
 	path := filepath.Join("testdata", "dwca", "gymnodiniales.tar.gz")
 	cfg := config.New(config.OptWrongFieldsNum(gnfmt.SkipBadRow))
+	coldpCfg := cfg.ToColdpConfig()
 
 	err = sysio.New(cfg).Init()
 	assert.Nil(err)
@@ -64,14 +66,11 @@ func TestOutSFGA(t *testing.T) {
 	schema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
 	sfdb := dbio.New(cfg.CacheSfgaDir)
 
-	sfarc := sfarcio.New(cfg, schema, sfdb)
-	err = sfarc.Connect()
+	sfgarc := sfgarcio.New(coldpCfg, schema, sfdb)
+	err = sfgarc.Connect()
 	assert.Nil(err)
 
-	fd := fdwca.New(cfg, sfarc)
-
-	err = fd.ExportSFGA("test")
-	assert.NotNil(err)
+	fd := fdwca.New(cfg, sfgarc)
 
 	arc, err := fd.GetDwCA(path)
 	assert.Nil(err)

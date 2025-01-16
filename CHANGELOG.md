@@ -5,6 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.5.0] - 2025-01-20 Mon
+
+Add [#12]: compatibility with CoLDP-based SFGA schema.
 Add: cardinality data.
 Add: option to process, skip or break on rows with wrong number of fields
 Add: localID and globalID

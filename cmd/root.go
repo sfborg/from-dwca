@@ -27,7 +27,7 @@ import (
 	"path/filepath"
 
 	dwca "github.com/gnames/dwca/pkg"
-	"github.com/sfborg/from-dwca/internal/io/sfarcio"
+	"github.com/sfborg/from-coldp/pkg/io/sfgarcio"
 	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
@@ -69,7 +69,8 @@ based on a version of sgma schema.`,
 			opts = append(opts, config.OptWithBinOutput(true))
 		}
 
-		cfg := config.New(opts...)
+		cfg := config.New()
+		coldpCfg := cfg.ToColdpConfig()
 		err = sysio.New(cfg).Init()
 		if err != nil {
 			slog.Error("Cannot initialize file system", "error", err)
@@ -79,14 +80,15 @@ based on a version of sgma schema.`,
 		sfgaSchema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
 		sfgaDB := dbio.New(cfg.CacheSfgaDir)
 
-		sfarc := sfarcio.New(cfg, sfgaSchema, sfgaDB)
+		sfarc := sfgarcio.New(coldpCfg, sfgaSchema, sfgaDB)
 		err = sfarc.Connect()
 		if err != nil {
-			slog.Error("Cannot initialize storage", "error", err)
+			slog.Error("Cannot initialize SFGA database", "error", err)
 			os.Exit(1)
 		}
 
 		fd := fdwca.New(cfg, sfarc)
+
 		var arc dwca.Archive
 
 		slog.Info("Importing DwCA data", "file", dwcaPath)
