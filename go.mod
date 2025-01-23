@@ -1,10 +1,12 @@
 module github.com/sfborg/from-dwca
 
-go 1.23.3
+go 1.23.4
 
 replace github.com/gnames/dwca => ../dwca
 
 replace github.com/gnames/coldp => ../coldp
+
+replace github.com/sfborg/from-dwca => ../from-dwca
 
 require (
 	github.com/gnames/coldp v0.3.1

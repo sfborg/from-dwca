@@ -126,19 +126,29 @@ func (fd *fdwca) processCoreRow(
 	res := coldp.NameUsage{ID: row[idIdx]}
 	res.FullScientificName = fieldVal(row, fieldsMap, "scientificnamestring")
 	res.ScientificName = fieldVal(row, fieldsMap, "scientificname")
-	res.Authorship = fieldVal(row, fieldsMap, "authorship")
+	res.Authorship = fieldVal(row, fieldsMap, "scientificnameauthorship")
 	res.LocalID = fieldVal(row, fieldsMap, "localid")
 	res.GlobalID = fieldVal(row, fieldsMap, "globalid")
-	res.ParentID = fieldVal(row, fieldsMap, "parentid")
+	res.ParentID = fieldVal(row, fieldsMap, "parentnameusageid")
 	code := fieldVal(row, fieldsMap, "nomenclaturalcode")
 	res.Code = coldp.NewNomCode(code)
 	rank := fieldVal(row, fieldsMap, "taxonrank")
 	res.Rank = coldp.NewRank(rank)
 	acceptedNameUsageID := fieldVal(row, fieldsMap, "acceptednameusageid")
+	ts := fieldVal(row, fieldsMap, "taxonomicstatus")
+	res.TaxonomicStatus = coldp.NewTaxonomicStatus(ts)
+
 	if res.ID != acceptedNameUsageID {
 		res.ParentID = acceptedNameUsageID
-		res.TaxonomicStatus = coldp.NewTaxonomicStatus("synonym")
+		if res.TaxonomicStatus == coldp.UnknownTaxSt {
+			res.TaxonomicStatus = coldp.SynonymTS
+		}
+	} else {
+		if res.TaxonomicStatus == coldp.UnknownTaxSt {
+			res.TaxonomicStatus = coldp.AcceptedTS
+		}
 	}
+
 	res.Kingdom = fieldVal(row, fieldsMap, "kingdom")
 	res.Phylum = fieldVal(row, fieldsMap, "phylum")
 	domain := fieldVal(row, fieldsMap, "domain")
