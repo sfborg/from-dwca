@@ -14,10 +14,10 @@ var (
 	repoURL = "https://github.com/sfborg/sfga"
 
 	// tag of the sfga repo to get correct schema version.
-	repoTag = "v0.3.15"
+	repoTag = "v0.3.21"
 
 	// schemaHash is the sha256 sum of the correponding schema version.
-	schemaHash = "59fcbf07d83846"
+	schemaHash = "2892a4c828ce"
 
 	// jobsNum is the default number of concurrent jobs to run.
 	jobsNum = 5

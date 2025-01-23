@@ -124,7 +124,7 @@ func (fd *fdwca) processCoreRow(
 	fieldsMap map[string]int,
 ) coldp.NameUsage {
 	res := coldp.NameUsage{ID: row[idIdx]}
-	res.FullScientificName = fieldVal(row, fieldsMap, "scientificnamestring")
+	res.ScientificNameString = fieldVal(row, fieldsMap, "scientificnamestring")
 	res.ScientificName = fieldVal(row, fieldsMap, "scientificname")
 	res.Authorship = fieldVal(row, fieldsMap, "scientificnameauthorship")
 	res.LocalID = fieldVal(row, fieldsMap, "localid")

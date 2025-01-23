@@ -2,22 +2,16 @@ module github.com/sfborg/from-dwca
 
 go 1.23.4
 
-replace github.com/gnames/dwca => ../dwca
-
-replace github.com/gnames/coldp => ../coldp
-
-replace github.com/sfborg/from-dwca => ../from-dwca
-
 require (
-	github.com/gnames/coldp v0.3.1
-	github.com/gnames/dwca v0.3.4
+	github.com/gnames/coldp v0.3.3
+	github.com/gnames/dwca v0.3.5
 	github.com/gnames/gnfmt v0.5.3
 	github.com/gnames/gnlib v0.44.0
 	github.com/gnames/gnparser v1.11.1
 	github.com/gnames/gnsys v0.3.4
 	github.com/lmittmann/tint v1.0.6
-	github.com/sfborg/from-coldp v0.5.2
-	github.com/sfborg/sflib v0.1.6
+	github.com/sfborg/from-coldp v0.5.4
+	github.com/sfborg/sflib v0.1.7
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/cobra-cli v1.3.0
 	github.com/stretchr/testify v1.10.0
@@ -26,7 +20,7 @@ require (
 
 require (
 	github.com/VividCortex/ewma v1.2.0 // indirect
-	github.com/cheggaaa/pb/v3 v3.1.5 // indirect
+	github.com/cheggaaa/pb/v3 v3.1.6 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
