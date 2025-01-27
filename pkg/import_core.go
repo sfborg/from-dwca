@@ -139,6 +139,8 @@ func (fd *fdwca) processCoreRow(
 	res.TaxonomicStatus = coldp.NewTaxonomicStatus(ts)
 
 	if res.ID != acceptedNameUsageID {
+		// for NameUsage's synonyms accepted ID goes to parent, and
+		// synonymy is expressed by taxonomic status
 		res.ParentID = acceptedNameUsageID
 		if res.TaxonomicStatus == coldp.UnknownTaxSt {
 			res.TaxonomicStatus = coldp.SynonymTS
