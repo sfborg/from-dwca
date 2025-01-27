@@ -138,7 +138,9 @@ func (fd *fdwca) processCoreRow(
 	ts := fieldVal(row, fieldsMap, "taxonomicstatus")
 	res.TaxonomicStatus = coldp.NewTaxonomicStatus(ts)
 
-	if res.ID != acceptedNameUsageID {
+	if acceptedNameUsageID != "" && res.ID != acceptedNameUsageID {
+		// for NameUsage's synonyms accepted ID goes to parent, and
+		// synonymy is expressed by taxonomic status
 		res.ParentID = acceptedNameUsageID
 		if res.TaxonomicStatus == coldp.UnknownTaxSt {
 			res.TaxonomicStatus = coldp.SynonymTS
@@ -153,7 +155,7 @@ func (fd *fdwca) processCoreRow(
 	res.Phylum = fieldVal(row, fieldsMap, "phylum")
 	domain := fieldVal(row, fieldsMap, "domain")
 	if domain != "" {
-		res.Phylum = domain
+		res.Kingdom = domain
 	}
 	res.Class = fieldVal(row, fieldsMap, "class")
 	res.Order = fieldVal(row, fieldsMap, "order")

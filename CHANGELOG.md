@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.5.2] - 2025-01-27 Mon
+
+Fis: taxon.ParentID does not show.
+
 ## [v0.5.1] - 2025-01-23 Thu
 
 Add: update modules.
