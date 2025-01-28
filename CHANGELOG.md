@@ -5,9 +5,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.5.3] - 2025-01-28 Tue
+
+Add: update to from-coldp v0.5.7.
+
 ## [v0.5.2] - 2025-01-27 Mon
 
-Fis: taxon.ParentID does not show.
+Fix: taxon.ParentID does not show.
 
 ## [v0.5.1] - 2025-01-23 Thu
 
