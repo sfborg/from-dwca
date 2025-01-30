@@ -10,7 +10,7 @@ require (
 	github.com/gnames/gnparser v1.11.1
 	github.com/gnames/gnsys v0.3.4
 	github.com/lmittmann/tint v1.0.7
-	github.com/sfborg/from-coldp v0.5.8
+	github.com/sfborg/from-coldp v0.5.9
 	github.com/sfborg/sflib v0.1.7
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/cobra-cli v1.3.0
