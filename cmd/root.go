@@ -49,7 +49,7 @@ based on a version of sgma schema.`,
 		var err error
 		versionFlag(cmd)
 		flags := []flagFunc{
-			debugFlag, cacheDirFlag, jobsNumFlag, binFlag, zipFlag, fieldsNumFlag,
+			debugFlag, cacheDirFlag, jobsNumFlag, zipFlag, fieldsNumFlag,
 		}
 		for _, v := range flags {
 			v(cmd)
@@ -69,8 +69,9 @@ based on a version of sgma schema.`,
 			opts = append(opts, config.OptWithBinOutput(true))
 		}
 
-		cfg := config.New()
+		cfg := config.New(opts...)
 		coldpCfg := cfg.ToColdpConfig()
+
 		err = sysio.New(cfg).Init()
 		if err != nil {
 			slog.Error("Cannot initialize file system", "error", err)
@@ -127,13 +128,12 @@ func Execute() {
 
 func init() {
 	rootCmd.Flags().BoolP("debug", "d", false, "set debug mode")
-	rootCmd.Flags().StringP("root-dir", "r", "", "root directory for temporary files")
+	rootCmd.Flags().StringP("cache-dir", "c", "", "cache directory for temporary files")
 	rootCmd.Flags().StringP("wrong-fields-num", "w", "",
 		`how to process rows with wrong fields number
      choices: 'stop', 'skip', 'process'
      default: 'stop'`)
 	rootCmd.Flags().IntP("jobs-number", "j", 0, "number of concurrent jobs")
-	rootCmd.Flags().BoolP("binary-output", "b", false, "return binary SQLite database")
 	rootCmd.Flags().BoolP("zip-output", "z", false, "compress output with zip")
 	rootCmd.Flags().BoolP("version", "V", false, "shows app's version")
 }

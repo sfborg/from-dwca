@@ -10,5 +10,6 @@ func (c Config) ToColdpConfig() coldpcfg.Config {
 	res.JobsNum = c.JobsNum
 	res.BatchSize = c.BatchSize
 	res.BadRow = c.BadRow
+	res.WithZipOutput = c.WithZipOutput
 	return res
 }

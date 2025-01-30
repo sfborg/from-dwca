@@ -24,16 +24,9 @@ func debugFlag(cmd *cobra.Command) {
 }
 
 func cacheDirFlag(cmd *cobra.Command) {
-	root, _ := cmd.Flags().GetString("root-dir")
-	if root != "" {
-		opts = append(opts, config.OptCacheDir(root))
-	}
-}
-
-func binFlag(cmd *cobra.Command) {
-	b, _ := cmd.Flags().GetBool("binary-output")
-	if b {
-		opts = append(opts, config.OptWithBinOutput(b))
+	cache, _ := cmd.Flags().GetString("cache-dir")
+	if cache != "" {
+		opts = append(opts, config.OptCacheDir(cache))
 	}
 }
 

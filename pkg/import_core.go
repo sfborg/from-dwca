@@ -108,7 +108,10 @@ func fieldsMap(fields []meta.Field) map[string]int {
 	return fieldsMap
 }
 
-func fieldVal(row []string, fielsMap map[string]int, name string) string {
+func fieldVal(
+	row []string,
+	fielsMap map[string]int,
+	name string) string {
 	if idx, ok := fielsMap[name]; ok {
 		if idx >= len(row) {
 			return ""
@@ -134,22 +137,7 @@ func (fd *fdwca) processCoreRow(
 	res.Code = coldp.NewNomCode(code)
 	rank := fieldVal(row, fieldsMap, "taxonrank")
 	res.Rank = coldp.NewRank(rank)
-	acceptedNameUsageID := fieldVal(row, fieldsMap, "acceptednameusageid")
-	ts := fieldVal(row, fieldsMap, "taxonomicstatus")
-	res.TaxonomicStatus = coldp.NewTaxonomicStatus(ts)
-
-	if acceptedNameUsageID != "" && res.ID != acceptedNameUsageID {
-		// for NameUsage's synonyms accepted ID goes to parent, and
-		// synonymy is expressed by taxonomic status
-		res.ParentID = acceptedNameUsageID
-		if res.TaxonomicStatus == coldp.UnknownTaxSt {
-			res.TaxonomicStatus = coldp.SynonymTS
-		}
-	} else {
-		if res.TaxonomicStatus == coldp.UnknownTaxSt {
-			res.TaxonomicStatus = coldp.AcceptedTS
-		}
-	}
+	res = addTaxonomicStatus(res, row, fieldsMap)
 
 	res.Kingdom = fieldVal(row, fieldsMap, "kingdom")
 	res.Phylum = fieldVal(row, fieldsMap, "phylum")
@@ -162,4 +150,39 @@ func (fd *fdwca) processCoreRow(
 	res.Family = fieldVal(row, fieldsMap, "family")
 	res.Genus = fieldVal(row, fieldsMap, "genus")
 	return res
+}
+
+func addTaxonomicStatus(
+	nu coldp.NameUsage,
+	row []string,
+	fieldMap map[string]int,
+) coldp.NameUsage {
+	nu.TaxonomicStatus = coldp.UnknownTaxSt
+
+	// if neither acceptedNameUsageID or taxonomicStatus are given
+	// we cannot assert taxonomic status
+	_, hasStatus := fieldMap["taxonomicstatus"]
+	_, hasAccepted := fieldMap["acceptednameusageid"]
+	if !hasStatus && !hasAccepted {
+		return nu
+	}
+
+	// use provided addTaxonomicStatus if possible
+	ts := fieldVal(row, fieldMap, "taxonomicstatus")
+	nu.TaxonomicStatus = coldp.NewTaxonomicStatus(ts)
+	if nu.TaxonomicStatus != coldp.UnknownTaxSt {
+		return nu
+	}
+
+	acceptedNameUsageID := fieldVal(row, fieldMap, "acceptednameusageid")
+	if acceptedNameUsageID != "" && nu.ID != acceptedNameUsageID {
+		// for NameUsage's synonyms accepted ID goes to parent, and
+		// synonymy is expressed by taxonomic status
+		nu.ParentID = acceptedNameUsageID
+		nu.TaxonomicStatus = coldp.SynonymTS
+		return nu
+	}
+
+	nu.TaxonomicStatus = coldp.AcceptedTS
+	return nu
 }

@@ -1,16 +1,16 @@
 module github.com/sfborg/from-dwca
 
-go 1.23.4
+go 1.23.5
 
 require (
 	github.com/gnames/coldp v0.3.5
-	github.com/gnames/dwca v0.3.6
-	github.com/gnames/gnfmt v0.5.3
+	github.com/gnames/dwca v0.3.7
+	github.com/gnames/gnfmt v0.5.4
 	github.com/gnames/gnlib v0.44.0
 	github.com/gnames/gnparser v1.11.1
 	github.com/gnames/gnsys v0.3.4
 	github.com/lmittmann/tint v1.0.7
-	github.com/sfborg/from-coldp v0.5.7
+	github.com/sfborg/from-coldp v0.5.8
 	github.com/sfborg/sflib v0.1.7
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/cobra-cli v1.3.0
@@ -49,12 +49,12 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/spf13/viper v1.19.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/ulikunitz/xz v0.5.12 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8 // indirect
+	golang.org/x/exp v0.0.0-20250128182459-e0ece0dbea4c // indirect
 	golang.org/x/net v0.34.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect

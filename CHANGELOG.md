@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.5.4] - 2025-01-30 Thu
+
+Add: fix problems with taxonomic status during conversion.
+Fix: make command flags work.
+
 ## [v0.5.3] - 2025-01-28 Tue
 
 Add: update to from-coldp v0.5.7.
