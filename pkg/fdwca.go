@@ -85,7 +85,7 @@ func (fd *fdwca) ImportDwCA(arc dwca.Archive) error {
 }
 
 func (f *fdwca) ExportSFGA(outputPath string) error {
-	err := f.s.Export(outputPath, true)
+	err := f.s.Export(outputPath, f.cfg.WithZipOutput)
 	if err != nil {
 		return err
 	}
