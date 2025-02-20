@@ -76,7 +76,7 @@ based on a version of sgma schema.`,
 		}
 
 		sfga := sfgaio.New()
-		err = sfga.Create(cfg.CacheSfgaDir, cfg.GitRepo)
+		err = sfga.Create(cfg.CacheSfgaDir)
 		if err != nil {
 			slog.Error("Cannot create SFGA database", "error", err)
 			os.Exit(1)

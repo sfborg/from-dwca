@@ -6,29 +6,13 @@ import (
 	"path/filepath"
 
 	"github.com/gnames/gnfmt"
-	"github.com/sfborg/sflib/ent/sfga"
 )
 
-var (
-	// repoURL is the URL to the SFGA schema repository.
-	repoURL = "https://github.com/sfborg/sfga"
-
-	// tag of the sfga repo to get correct schema version.
-	repoTag = "v0.3.22"
-
-	// schemaHash is the sha256 sum of the correponding schema version.
-	schemaHash = "17cd95d6d4eaa"
-
-	// jobsNum is the default number of concurrent jobs to run.
-	jobsNum = 5
-)
+var jobsNum = 5
 
 // Config is a configuration object for the Darwin Core Archive (DwCA)
 // data processing.
 type Config struct {
-	// GitRepo contains data for sfga schema Git repository.
-	sfga.GitRepo
-
 	// TempRepoDir is a temporary location to schema files downloaded from GitHub.
 	TempRepoDir string
 
@@ -125,11 +109,6 @@ func New(opts ...Option) Config {
 	schemaRepo := filepath.Join(tmpDir, "sfborg", "sfga")
 
 	res := Config{
-		GitRepo: sfga.GitRepo{
-			URL:          repoURL,
-			Tag:          repoTag,
-			ShaSchemaSQL: schemaHash,
-		},
 		TempRepoDir: schemaRepo,
 		CacheDir:    path,
 		JobsNum:     jobsNum,

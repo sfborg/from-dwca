@@ -35,7 +35,7 @@ func TestImportDwCA(t *testing.T) {
 	assert.Nil(err)
 
 	sfga := sfgaio.New()
-	sfga.Create(cfg.CacheSfgaDir, cfg.GitRepo)
+	sfga.Create(cfg.CacheSfgaDir)
 	_, err = sfga.Connect()
 	assert.Nil(err)
 
@@ -59,7 +59,7 @@ func TestOutSFGA(t *testing.T) {
 	assert.Nil(err)
 
 	sfga := sfgaio.New()
-	err = sfga.Create(cfg.CacheSfgaDir, cfg.GitRepo)
+	err = sfga.Create(cfg.CacheSfgaDir)
 	_, err = sfga.Connect()
 	assert.Nil(err)
 
@@ -100,7 +100,7 @@ func TestOutSimpleSFGA(t *testing.T) {
 
 	sfga := sfgaio.New()
 	_, err = sfga.Connect()
-	err = sfga.Create(cfg.CacheSfgaDir, cfg.GitRepo)
+	err = sfga.Create(cfg.CacheSfgaDir)
 	assert.Nil(err)
 
 	fd := fdwca.New(cfg, sfga)
