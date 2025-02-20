@@ -27,12 +27,10 @@ import (
 	"path/filepath"
 
 	dwca "github.com/gnames/dwca/pkg"
-	"github.com/sfborg/from-coldp/pkg/io/sfgarcio"
 	"github.com/sfborg/from-dwca/internal/io/sysio"
 	fdwca "github.com/sfborg/from-dwca/pkg"
 	"github.com/sfborg/from-dwca/pkg/config"
-	"github.com/sfborg/sflib/io/dbio"
-	"github.com/sfborg/sflib/io/schemaio"
+	"github.com/sfborg/sflib/io/sfgaio"
 	"github.com/spf13/cobra"
 )
 
@@ -70,7 +68,6 @@ based on a version of sgma schema.`,
 		}
 
 		cfg := config.New(opts...)
-		coldpCfg := cfg.ToColdpConfig()
 
 		err = sysio.New(cfg).Init()
 		if err != nil {
@@ -78,17 +75,19 @@ based on a version of sgma schema.`,
 			os.Exit(1)
 		}
 
-		sfgaSchema := schemaio.New(cfg.GitRepo, cfg.TempRepoDir)
-		sfgaDB := dbio.New(cfg.CacheSfgaDir)
-
-		sfarc := sfgarcio.New(coldpCfg, sfgaSchema, sfgaDB)
-		err = sfarc.Connect()
+		sfga := sfgaio.New()
+		err = sfga.Create(cfg.CacheSfgaDir, cfg.GitRepo)
+		if err != nil {
+			slog.Error("Cannot create SFGA database", "error", err)
+			os.Exit(1)
+		}
+		_, err = sfga.Connect()
 		if err != nil {
 			slog.Error("Cannot initialize SFGA database", "error", err)
 			os.Exit(1)
 		}
 
-		fd := fdwca.New(cfg, sfarc)
+		fd := fdwca.New(cfg, sfga)
 
 		var arc dwca.Archive
 

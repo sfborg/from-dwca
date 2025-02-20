@@ -4,18 +4,18 @@ import (
 	dwca "github.com/gnames/dwca/pkg"
 	dwcacfg "github.com/gnames/dwca/pkg/config"
 	"github.com/gnames/gnparser"
-	"github.com/sfborg/from-coldp/pkg/ent/sfgarc"
 	"github.com/sfborg/from-dwca/pkg/config"
+	"github.com/sfborg/sflib/ent/sfga"
 )
 
 type fdwca struct {
 	cfg     config.Config
-	s       sfgarc.Archive
+	s       sfga.Archive
 	d       dwca.Archive
 	gnpPool chan gnparser.GNparser
 }
 
-func New(cfg config.Config, sfgarc sfgarc.Archive) FromDwCA {
+func New(cfg config.Config, sfga sfga.Archive) FromDwCA {
 	res := &fdwca{cfg: cfg}
 
 	poolSize := cfg.JobsNum
@@ -25,7 +25,7 @@ func New(cfg config.Config, sfgarc sfgarc.Archive) FromDwCA {
 		gnpPool <- gnparser.New(cfgGNP)
 	}
 	res.gnpPool = gnpPool
-	res.s = sfgarc
+	res.s = sfga
 
 	return res
 }
@@ -85,7 +85,7 @@ func (fd *fdwca) ImportDwCA(arc dwca.Archive) error {
 }
 
 func (f *fdwca) ExportSFGA(outputPath string) error {
-	err := f.s.Export(outputPath)
+	err := f.s.Export(outputPath, true)
 	if err != nil {
 		return err
 	}
