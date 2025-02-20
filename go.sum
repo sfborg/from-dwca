@@ -382,10 +382,8 @@ github.com/sagikazarmark/locafero v0.7.0/go.mod h1:2za3Cg5rMaTMoG/2Ulr9AwtFaIppK
 github.com/sagikazarmark/slog-shim v0.1.0 h1:diDBnUNK9N/354PgrxMywXnAwEr1QZcOr6gto+ugjYE=
 github.com/sagikazarmark/slog-shim v0.1.0/go.mod h1:SrcSrq8aKtyuqEI1uvTDTK1arOWRIczQRv+GVI1AkeQ=
 github.com/sean-/seed v0.0.0-20170313163322-e2103e2c3529/go.mod h1:DxrIzT+xaE7yg65j358z/aeFdxmN0P9QXhEzd20vsDc=
-github.com/sfborg/from-coldp v0.5.10 h1:AKt0c3+aqWAwuTsRpgjMJGAOMOj4mskeise/N6RSsnY=
-github.com/sfborg/from-coldp v0.5.10/go.mod h1:5/NNyh5b2ZyZ6msDARC2tnRpeMz898opGHz6ktd5i+w=
-github.com/sfborg/sflib v0.2.2 h1:nKS4NPZNRFkuDjlNr25gBpyWpJoEtaFpBwgh7AxwsEk=
-github.com/sfborg/sflib v0.2.2/go.mod h1:SMBQm1Toz2tU7fJBU2RKVZpXO3p1/MmHxkS6tMYRd8g=
+github.com/sfborg/sflib v0.2.3 h1:mdRTWEazV6yKDIpa+XjdRb8aVOD2MKlhsBsccvKM/aQ=
+github.com/sfborg/sflib v0.2.3/go.mod h1:SMBQm1Toz2tU7fJBU2RKVZpXO3p1/MmHxkS6tMYRd8g=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=
