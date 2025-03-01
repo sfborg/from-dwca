@@ -99,8 +99,9 @@ func TestOutSimpleSFGA(t *testing.T) {
 	assert.Nil(err)
 
 	sfga := sfgaio.New()
-	_, err = sfga.Connect()
 	err = sfga.Create(cfg.CacheSfgaDir)
+	assert.Nil(err)
+	_, err = sfga.Connect()
 	assert.Nil(err)
 
 	fd := fdwca.New(cfg, sfga)
@@ -130,7 +131,7 @@ func TestOutSimpleSFGA(t *testing.T) {
 
 	var count int
 	err = db.QueryRow(
-		`SELECT count(*) FROM taxon WHERE status_id != ''`,
+		`SELECT count(*) FROM taxon WHERE col__status_id != ''`,
 	).Scan(&count)
 	assert.Nil(err)
 	assert.Equal(0, count)
