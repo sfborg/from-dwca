@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.5.9] - 2025-03-05 Wed
+
+Add: add canonicals, matches in SFGA schema.
+
 ## [v0.5.8] - 2025-03-01 Sat
 
 Add: update sflib (schema v0.3.25 with `col__` and `gn__` namespaces).

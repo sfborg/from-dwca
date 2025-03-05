@@ -2,19 +2,15 @@ module github.com/sfborg/from-dwca
 
 go 1.23.6
 
-replace github.com/gnames/coldp => ../coldp
-
-replace github.com/sfborg/sflib => ../sflib
-
 require (
-	github.com/gnames/coldp v0.3.11
+	github.com/gnames/coldp v0.3.12
 	github.com/gnames/dwca v0.3.7
 	github.com/gnames/gnfmt v0.5.4
 	github.com/gnames/gnlib v0.46.0
 	github.com/gnames/gnparser v1.11.2
 	github.com/gnames/gnsys v0.3.8
 	github.com/lmittmann/tint v1.0.7
-	github.com/sfborg/sflib v0.2.5
+	github.com/sfborg/sflib v0.2.6
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/cobra-cli v1.3.0
 	github.com/stretchr/testify v1.10.0
